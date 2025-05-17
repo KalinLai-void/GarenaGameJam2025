@@ -4,7 +4,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
 
-    private int enemyHealthPoint;
+    [SerializeField]private int enemyHealthPoint;
     private int enemyBaseAttackPower;
     private bool facing; //方向 left: false right: true
     private Player player;
@@ -20,6 +20,7 @@ public class Enemy : MonoBehaviour
         player = FindObjectOfType<Player>();
         gameManager = FindObjectOfType<GameManager>();
         gameManager.allPositions[transform.position] = true;
+        gameManager.enemyList.Add(this);
         enemyActionDatas = new List<EnemyActionData>();
         enemyActionDatasDefult = new List<EnemyActionData>();
         EnemyAction[] values = (EnemyAction[])System.Enum.GetValues(typeof(CardType));
@@ -39,8 +40,29 @@ public class Enemy : MonoBehaviour
         Initialize();
     }
 
+    public void SetEnemyHealthPoint(int healthPoint)
+    {
+        enemyHealthPoint = healthPoint;
+    }
+
+    public void Hitten(int damage)
+    {
+        enemyHealthPoint -= damage;
+    }
+
     public void EnemyAction()
     {
+        Debug.Log("enemy action");
+        if (enemyHealthPoint <= 0)
+        {
+            if (enemyHealthPoint < -1000)
+            {
+                player.GetNewPower();
+            }
+            gameManager.enemyList.Remove(this);
+            Destroy(gameObject);
+            return;
+        }
         if (IsFacingPlayer())
         {
             Attack();
@@ -91,7 +113,7 @@ public class Enemy : MonoBehaviour
     }
     private void Attack()
     {
-        Debug.Log("Enemy Attack" + enemyBaseAttackPower);
+        //Debug.Log("Enemy Attack" + enemyBaseAttackPower);
     }
 
     private bool IsFacingPlayer()

@@ -13,7 +13,7 @@ public class ButtonUIMove : MonoBehaviour
 
         RemoveOthers();
         Invoke("SelectMe", 1f);
-        Invoke("SelectMe", 2f);
+        //Invoke("SelectMe", 2f);
     }
 
     private void RemoveOthers()
@@ -34,7 +34,8 @@ public class ButtonUIMove : MonoBehaviour
                     ), 0.5f);
                 
 
-                rt.DOMove(new Vector2(rt.position.x, -340), 7f);
+                rt.DOMove(new Vector2(rt.position.x, -140), 3f);
+                Destroy(rt.gameObject, 7f);
             }
         }
     }
@@ -43,12 +44,21 @@ public class ButtonUIMove : MonoBehaviour
     {
         RectTransform rt = GetComponent<RectTransform>();
 
-        rt.DOMove(new Vector2(284, this.transform.position.y), .7f);
+        rt.DOMove(new Vector2((float)Screen.width/2, this.transform.position.y), .7f);
+
+        ExecuteSkill();
     }
 
     private void ExecuteSkill()
     {
+        GetComponent<Card>().OnButtonClick();
+        RemoveMe(1f);
+    }
 
+    private void RemoveMe(float destroyTime = 1f)
+    {
+        GetComponentInParent<HorizontalLayoutGroup>().enabled = true;
+        Destroy(this.gameObject, destroyTime); //時間可以改
     }
 
    

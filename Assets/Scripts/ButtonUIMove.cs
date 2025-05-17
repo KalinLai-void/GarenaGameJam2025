@@ -6,6 +6,9 @@ using DG.Tweening;
 
 public class ButtonUIMove : MonoBehaviour
 {
+    public float holdingTimer = 1f;
+
+
     public void ButtonPressed()
     {
         GetComponentInParent<HorizontalLayoutGroup>().enabled = false;
@@ -13,6 +16,7 @@ public class ButtonUIMove : MonoBehaviour
 
         RemoveOthers();
         Invoke("SelectMe", 1f);
+        Invoke("ExecuteSkill", 2.7f);
         //Invoke("SelectMe", 2f);
     }
 
@@ -51,8 +55,14 @@ public class ButtonUIMove : MonoBehaviour
 
     private void ExecuteSkill()
     {
+        RectTransform rt = this.GetComponent<RectTransform>();
+
+        Image skillImage = this.GetComponent<Image>();
+
+        rt.DOMove(new Vector2(rt.position.x, (float)Screen.width/2), 3f);
+
         GetComponent<Card>().OnButtonClick();
-        RemoveMe(1f);
+        RemoveMe(1.1f);
     }
 
     private void RemoveMe(float destroyTime = 1f)

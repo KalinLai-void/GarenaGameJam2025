@@ -23,11 +23,10 @@ public class Card : MonoBehaviour
         ApplyColor();
         Debug.Log("Hand: " + cardTypeData.cardType);
     }
-    // Start is called before the first frame update
-    void Start()
+
+    void Awake()
     {
         Initialize();
-
     }
 
     private void OnMouseDown()

@@ -8,17 +8,18 @@ public class GameManager : MonoBehaviour
     public Player player;
     public List<CardTypeData> hands;
     private int currCardId;
-
+    private Enemy[] enemyList;  
     public GameObject cardPrefab;
     private int cardsInHandCount;
     private Vector3 cardDefultPos;
-    
+
 
     public void Initialize()
     {
         currCardId = 0;
         cardsInHandCount = 3;
         cardDefultPos = new Vector3(0, -3, 0);
+        enemyList = FindObjectsOfType<Enemy>();  
     }
 
     public void Awake()
@@ -55,6 +56,10 @@ public class GameManager : MonoBehaviour
     public void EnemyMove()
     {
         Debug.Log("Enemy Move");
+        foreach (Enemy enemy in enemyList)
+        {
+            enemy.EnemyAction();
+        }
         TurnProcess();
     }
 

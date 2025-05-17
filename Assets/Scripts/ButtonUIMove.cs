@@ -35,6 +35,7 @@ public class ButtonUIMove : MonoBehaviour
                 
 
                 rt.DOMove(new Vector2(rt.position.x, -340), 7f);
+                Destroy(rt.gameObject, 7f);
             }
         }
     }

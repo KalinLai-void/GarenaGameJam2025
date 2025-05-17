@@ -20,7 +20,6 @@ public class Card : MonoBehaviour
             cardTypeData = gameManager.hands[0];
             gameManager.hands.RemoveAt(0);
         }
-        ApplyColor();
         //Debug.Log("Hand: " + cardTypeData.cardType);
     }
 
@@ -29,7 +28,7 @@ public class Card : MonoBehaviour
         Initialize();
     }
 
-    private void OnMouseDown()
+    public void OnButtonClick()
     {
         if (cardTypeData.cardType == CardType.Move)
         {
@@ -60,7 +59,7 @@ public class Card : MonoBehaviour
                 gameManager.hands.Add(gameManager.allCards[i].cardTypeData);
             }
 
-            Destroy(gameManager.allCards[i].gameObject);
+            
         }
         while (gameManager.allCards.Count > 0)
         {
@@ -83,7 +82,7 @@ public class Card : MonoBehaviour
         }
         return data;
     }
-
+/*
     private Color GetColorByType()
     {
         if (cardTypeData.cardType == CardType.Move)
@@ -110,4 +109,5 @@ public class Card : MonoBehaviour
         Renderer renderer = gameObject.GetComponent<Renderer>();
         renderer.material.color = GetColorByType();
     }
+*/
 }

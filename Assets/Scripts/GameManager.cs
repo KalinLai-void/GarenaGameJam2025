@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     public List<Card> allCards;
     public List<Enemy> enemyList;
     public GameObject cardPrefab;
+    private SkillUIGenerator skillUIGenerator;
     private int cardsInHandCount;
     private Vector3 cardDefultPos;
 
@@ -26,6 +27,7 @@ public class GameManager : MonoBehaviour
         takeAbilitySuccessRate = 10;
         additionSuccessRate = 0;
         MP = 3;
+        skillUIGenerator = GetComponent<SkillUIGenerator>();
 
         cardDefultPos = new Vector3(0, -3, 0);
     }
@@ -72,11 +74,21 @@ public class GameManager : MonoBehaviour
 
     private void GenerateCards(Vector3 cardPos)
     {
-        cardPrefab.GetComponent<Card>().cardId = currCardId;
-        GameObject card = Instantiate(cardPrefab, cardPos, transform.rotation);
-        Card cardcom = card.GetComponent<Card>();
-        allCards.Add(cardcom);
+        CardTypeData data;
+        CardType[] values = (CardType[])System.Enum.GetValues(typeof(CardType)); //暫定 之後程式邏輯會改
+        int index = UnityEngine.Random.Range(0, values.Length);
+        data.cardType = values[index];
+        data.moveBlock = UnityEngine.Random.Range(-3, 4);
+        while (data.moveBlock == 0)
+        {
+            data.moveBlock = Random.Range(-3, 4);
+        }
+        skillUIGenerator.GenerateSkill(data, currCardId);
         currCardId++;
+    }
+    public void PushCard(Card card)
+    {
+        allCards.Add(card);
     }
 
     public List<Card> GetAllCards()
@@ -86,6 +98,6 @@ public class GameManager : MonoBehaviour
 
     private void GameOver()
     {
-        
+
     }
 }

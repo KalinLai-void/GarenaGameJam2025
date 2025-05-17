@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
 
     public void Initialize()
     {
+        Debug.Log("Initialize");
         facing = true;
         healthPoint = 5;
         baseAttackPower = 1;

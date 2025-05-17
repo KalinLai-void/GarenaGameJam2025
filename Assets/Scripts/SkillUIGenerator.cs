@@ -15,23 +15,26 @@ public class SkillUIGenerator : MonoBehaviour
     private List<GameObject> skills;
 
 
-    public void GenerateSkill(CardTypeData data )
+    public void GenerateSkill(CardTypeData data, int cardId)
     {
         //Get Skill from Pacific Code
         //List<Card> cards = Find
 
         //checktype
-
-        foreach(var _skill in skills) 
+        
+        foreach (var _skill in skills)
         {
-            if(_skill.GetComponent<Card>().cardTypeData.cardType == data.cardType)
+            if (_skill.GetComponent<Card>().cardTypeData.cardType == data.cardType)
             {
-                 GameObject _skillButton = Instantiate(_skill , skillHolder);
-                 if(data.cardType == CardType.Move)
-                 {
-                     _skillButton.GetComponent<Card>().cardTypeData.moveBlock = data.moveBlock;
-                 }
-            }    
+                GameObject _skillButton = Instantiate(_skill, skillHolder);
+                Card card = _skillButton.GetComponent<Card>();
+                card.cardId = cardId;
+                GetComponent<GameManager>().PushCard(card);
+                if (data.cardType == CardType.Move)
+                {
+                    _skillButton.GetComponent<Card>().cardTypeData.moveBlock = data.moveBlock;
+                }
+            }
         } 
     }
 }

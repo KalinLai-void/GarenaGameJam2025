@@ -25,7 +25,9 @@ public struct EnemyActionData
     public EnemyAction enemyAction;
 }
 
+[System.Serializable]
 public struct Deck
 {
-    public List<CardType> deckCards;
+    public List<CardTypeData> deckCards;
+    public List<CardTypeData> discardCards;
 }

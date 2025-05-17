@@ -59,6 +59,8 @@ public class Card : MonoBehaviour
             player.TakeAbility();
         }
 
+        gameManager.AddToDiscardCards(cardTypeData);
+
         for (int i = 0; i < gameManager.allCards.Count; i++)
         {
             if (gameManager.allCards[i].cardId != cardId)

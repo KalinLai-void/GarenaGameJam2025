@@ -37,9 +37,10 @@ public class ButtonUIMove : MonoBehaviour
                     , (skillImage.color.r + skillImage.color.g + skillImage.color.b) / 3
                     ), 0.5f);
                 
-
                 rt.DOMove(new Vector2(rt.position.x, -140), 3f);
                 Destroy(rt.gameObject, 7f);
+                
+                
             }
         }
     }
@@ -59,7 +60,7 @@ public class ButtonUIMove : MonoBehaviour
 
         Image skillImage = this.GetComponent<Image>();
 
-        rt.DOMove(new Vector2(rt.position.x, (float)Screen.width/2), 3f);
+        rt.DOMove(new Vector2(rt.position.x, (float)Screen.width/2), 1f);
 
         GetComponent<Card>().OnButtonClick();
         RemoveMe(1.1f);
@@ -68,7 +69,7 @@ public class ButtonUIMove : MonoBehaviour
     private void RemoveMe(float destroyTime = 1f)
     {
         GetComponentInParent<HorizontalLayoutGroup>().enabled = true;
-        Destroy(this.gameObject, destroyTime); //®É¶¡¥i¥H§ï
+        Destroy(this.gameObject, destroyTime); //ï¿½É¶ï¿½ï¿½iï¿½Hï¿½ï¿½
     }
 
    

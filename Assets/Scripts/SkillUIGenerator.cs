@@ -28,6 +28,8 @@ public class SkillUIGenerator : MonoBehaviour
             {
                 GameObject _skillButton = Instantiate(_skill, skillHolder);
                 Card card = _skillButton.GetComponent<Card>();
+                card.cardTypeData.cardType = data.cardType;
+                card.cardTypeData.moveBlock = data.moveBlock;
                 card.cardId = cardId;
                 GetComponent<GameManager>().PushCard(card);
                 if (data.cardType == CardType.Move)

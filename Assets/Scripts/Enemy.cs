@@ -142,4 +142,6 @@ public class Enemy : MonoBehaviour
     {
         return 100 - 100 * (maxHealthPoint - enemyHealthPoint);
     }
+
+
 }

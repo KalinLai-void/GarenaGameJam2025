@@ -58,6 +58,11 @@ public class GameManager : MonoBehaviour
 
     public void EnemyMove()
     {
+        Invoke("EnemyAction", 5f);
+        Invoke("TurnProcess", 6f);
+    }
+    private void EnemyAction()
+    {
         Debug.Log("Enemy Move");
         Debug.Log(enemyList.Count);
         for (int i = enemyList.Count - 1; i >= 0; i--)
@@ -69,7 +74,6 @@ public class GameManager : MonoBehaviour
             GameOver();
             return;
         }
-        TurnProcess();
     }
 
     private void GenerateCards(Vector3 cardPos)

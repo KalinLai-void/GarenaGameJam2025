@@ -2,18 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class GameManager : MonoBehaviour
 {
     public Player player;
+    public List<CardTypeData> hands;
+    private int currCardId;
+
     public GameObject cardPrefab;
-    private int CardsInHandCount;
-    private Vector3 CardDefultPos;
+    private int cardsInHandCount;
+    private Vector3 cardDefultPos;
     
 
     public void Initialize()
     {
-        CardsInHandCount = 3;
-        CardDefultPos = new Vector3(0, -3, 0);
+        currCardId = 0;
+        cardsInHandCount = 3;
+        cardDefultPos = new Vector3(0, -3, 0);
     }
 
     public void Awake()
@@ -39,24 +44,24 @@ public class GameManager : MonoBehaviour
 
     private void DrawCards()
     {
-        for (int i = 0; i < CardsInHandCount; i++)
+        for (int i = 0; i < cardsInHandCount; i++)
         {
-            Vector3 cardPos = new Vector3(i * 3, 0, 0) + CardDefultPos;
+            Vector3 cardPos = new Vector3(i * 3, 0, 0) + cardDefultPos;
             GenerateCards(cardPos);
         }
+        Debug.Log("handsCount: " + hands.Count);
     }
 
-    private void PlayerMove()
+    public void EnemyMove()
     {
-        EnemyMove();
-    }
-
-    private void EnemyMove()
-    {
+        Debug.Log("Enemy Move");
+        TurnProcess();
     }
 
     private void GenerateCards(Vector3 cardPos)
     {
+        cardPrefab.GetComponent<Card>().cardId = currCardId;
         Instantiate(cardPrefab, cardPos, transform.rotation);
+        currCardId++;
     }
 }

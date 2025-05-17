@@ -4,34 +4,29 @@ using UnityEngine;
 
 public class Card : MonoBehaviour
 {
-    public enum CardType
-    {
-        Move, Attack, Pass, MakeEnemySurrender
-    }
-
-    public struct CardTypeData
-    {
-        public CardType cardType;
-    }
-
-    public struct Deck
-    {
-        public List<CardType> deckCards;
-    }
-
-    private Player player;
+    public int cardId;
     private CardTypeData cardTypeData;
+    private Player player;
+    private GameManager gameManager;
 
 
     private void Initialize()
     {
         player = FindFirstObjectByType<Player>().GetComponent<Player>();
         cardTypeData.cardType = GetRandomCardType();
+        gameManager = FindFirstObjectByType<GameManager>().GetComponent<GameManager>();
+        if (gameManager.hands.Count > 0)
+        {
+            cardTypeData = gameManager.hands[0];
+            gameManager.hands.RemoveAt(0);
+        }
+        Debug.Log("Hand: " + cardTypeData.cardType);
     }
     // Start is called before the first frame update
     void Start()
     {
         Initialize();
+        
     }
 
     private void OnMouseDown()
@@ -52,6 +47,17 @@ public class Card : MonoBehaviour
         {
             player.MakeEnemySurrender();
         }
+        Card[] allCards = FindObjectsOfType<Card>();
+
+        foreach (Card card in allCards)
+        {
+            if (card.cardId != cardId)
+            {
+                gameManager.hands.Add(card.cardTypeData);
+            }
+            Destroy(card.gameObject);
+        }
+        gameManager.EnemyMove();
     }
 
     private CardType GetRandomCardType()

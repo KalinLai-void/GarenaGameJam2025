@@ -25,6 +25,7 @@ public class Player : MonoBehaviour
 
     public bool Move(int dist)
     {
+        Debug.Log("playermove");
         if (IsVaildMove(dist))
         {
             if (dist > 0)
@@ -55,12 +56,12 @@ public class Player : MonoBehaviour
             AttackEnemy(0, transform.position - dir);
             facing = !facing;
         }
-        //Debug.Log("Player Attack Damage:" + baseAttackPower);
+        Debug.Log("Player Attack Damage:" + baseAttackPower);
     }
 
     public void Pass()
     {
-        //Debug.Log("Player Pass");
+        Debug.Log("Player Pass");
     }
 
     public void TakeAbility()
@@ -87,7 +88,7 @@ public class Player : MonoBehaviour
                 }
             }
         }
-        //Debug.Log("Make Enemy Surrender");
+        Debug.Log("Make Enemy Surrender");
     }
     public void GetNewPower()
     {

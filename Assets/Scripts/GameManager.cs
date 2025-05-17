@@ -58,6 +58,11 @@ public class GameManager : MonoBehaviour
 
     public void EnemyMove()
     {
+        Invoke("EnemyAction", 4.7f);
+        Invoke("TurnProcess", 5.7f);
+    }
+    private void EnemyAction()
+    {
         Debug.Log("Enemy Move");
         Debug.Log(enemyList.Count);
         for (int i = enemyList.Count - 1; i >= 0; i--)
@@ -69,7 +74,6 @@ public class GameManager : MonoBehaviour
             GameOver();
             return;
         }
-        TurnProcess();
     }
 
     private void GenerateCards(Vector3 cardPos)
@@ -91,6 +95,14 @@ public class GameManager : MonoBehaviour
         {
             data.moveBlock = Random.Range(-3, 4);
         }
+        if (data.cardType == CardType.takeAbility)
+        {
+            data.cost = 1;
+        }
+        else
+        {
+            data.cost = 0;
+        }
         skillUIGenerator.GenerateSkill(data, currCardId);
         currCardId++;
     }
@@ -102,6 +114,16 @@ public class GameManager : MonoBehaviour
     public List<Card> GetAllCards()
     {
         return allCards;
+    }
+
+    public int GetMP()
+    {
+        return MP;
+    }
+
+    public void CostMP(int cost)
+    {
+        MP -= cost;
     }
 
     private void GameOver()

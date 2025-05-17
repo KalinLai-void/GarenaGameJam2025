@@ -16,6 +16,7 @@ public struct CardTypeData
 {
     public CardType cardType;
     public int moveBlock;
+    public int cost;
 }
 
 [System.Serializable]

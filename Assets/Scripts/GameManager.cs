@@ -6,7 +6,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public Player player;
-    public Dictionary<Vector3, bool> enemyPositions = new Dictionary<Vector3, bool>();
+    public Dictionary<Vector3, bool> allPositions = new Dictionary<Vector3, bool>();
     public List<CardTypeData> hands;
     private int currCardId;
     private Enemy[] enemyList;  

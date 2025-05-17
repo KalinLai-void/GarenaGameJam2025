@@ -19,7 +19,7 @@ public class Enemy : MonoBehaviour
         facing = false;
         player = FindObjectOfType<Player>();
         gameManager = FindObjectOfType<GameManager>();
-        gameManager.enemyPositions[transform.position] = true;
+        gameManager.allPositions[transform.position] = true;
         enemyActionDatas = new List<EnemyActionData>();
         enemyActionDatasDefult = new List<EnemyActionData>();
         EnemyAction[] values = (EnemyAction[])System.Enum.GetValues(typeof(CardType));
@@ -85,9 +85,9 @@ public class Enemy : MonoBehaviour
     }
     private void Move(int dist)
     {
-        gameManager.enemyPositions[transform.position] = false;
+        gameManager.allPositions[transform.position] = false;
         transform.position += new Vector3(1, 0, 0) * dist;
-        gameManager.enemyPositions[transform.position] = true;
+        gameManager.allPositions[transform.position] = true;
     }
     private void Attack()
     {
@@ -104,9 +104,9 @@ public class Enemy : MonoBehaviour
     private bool IsVaildMove(int dist)
     {
         Vector3 target = new Vector3(dist, 0, 0) + transform.position;
-        if (gameManager.enemyPositions.ContainsKey(target))
+        if (gameManager.allPositions.ContainsKey(target))
         {
-            return !gameManager.enemyPositions[target];
+            return !gameManager.allPositions[target];
         }
         else
         {

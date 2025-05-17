@@ -33,7 +33,10 @@ public class Card : MonoBehaviour
     {
         if (cardTypeData.cardType == CardType.Move)
         {
-            player.Move(1);
+            if (!player.Move(1))
+            {
+                return;
+            }
         }
         if (cardTypeData.cardType == CardType.Attack)
         {

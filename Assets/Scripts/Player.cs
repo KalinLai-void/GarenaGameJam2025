@@ -6,11 +6,13 @@ public class Player : MonoBehaviour
 {
     private int healthPoint;
     private int baseAttackPower;
+    private GameManager gameManager;
 
     public void Initialize()
     {
-        healthPoint = 30;
-        baseAttackPower = 5;
+        healthPoint = 5;
+        baseAttackPower = 2;
+        gameManager = FindObjectOfType<GameManager>();
     }
 
     void Awake()
@@ -18,13 +20,6 @@ public class Player : MonoBehaviour
         Initialize();
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.A))
@@ -37,9 +32,16 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void Move(int dist)
+    public bool Move(int dist)
     {
-        transform.position += new Vector3(1, 0, 0) * dist;
+        if (IsVaildMove(dist))
+        {
+            gameManager.allPositions[transform.position] = false;
+            transform.position += new Vector3(1, 0, 0) * dist;
+            gameManager.allPositions[transform.position] = true;
+            return true;
+        }
+        return false;   
     }
 
     public void Attack()
@@ -55,5 +57,18 @@ public class Player : MonoBehaviour
     public void MakeEnemySurrender()
     {
         Debug.Log("Make Enemy Surrender");
+    }
+
+    private bool IsVaildMove(int dist)
+    {
+        Vector3 target = new Vector3(dist, 0, 0) + transform.position;
+        if (gameManager.allPositions.ContainsKey(target))
+        {
+            return !gameManager.allPositions[target];
+        }
+        else
+        {
+            return true;
+        }
     }
 }

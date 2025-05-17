@@ -1,15 +1,27 @@
 using System.Collections.Generic;
 using UnityEngine;
-
+[System.Serializable]
 public enum CardType
 {
-    Move, Attack, Pass, MakeEnemySurrender
+    Move, Attack, Pass, takeAbility
+}
+[System.Serializable]
+public enum EnemyAction
+{
+    MoveLeft, MoveRight, ChangeDirection
 }
 
 [System.Serializable]
 public struct CardTypeData
 {
     public CardType cardType;
+    public int moveBlock;
+}
+
+[System.Serializable]
+public struct EnemyActionData
+{
+    public EnemyAction enemyAction;
 }
 
 public struct Deck

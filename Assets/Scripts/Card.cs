@@ -5,7 +5,7 @@ using UnityEngine;
 public class Card : MonoBehaviour
 {
     public int cardId;
-    private CardTypeData cardTypeData;
+    public CardTypeData cardTypeData;
     private Player player;
     private GameManager gameManager;
 
@@ -13,7 +13,7 @@ public class Card : MonoBehaviour
     private void Initialize()
     {
         player = FindFirstObjectByType<Player>().GetComponent<Player>();
-        cardTypeData.cardType = GetRandomCardType();
+        cardTypeData = GetRandomCardType();
         gameManager = FindFirstObjectByType<GameManager>().GetComponent<GameManager>();
         if (gameManager.hands.Count > 0)
         {
@@ -23,18 +23,20 @@ public class Card : MonoBehaviour
         ApplyColor();
         Debug.Log("Hand: " + cardTypeData.cardType);
     }
-    // Start is called before the first frame update
-    void Start()
+
+    void Awake()
     {
         Initialize();
-
     }
 
     private void OnMouseDown()
     {
         if (cardTypeData.cardType == CardType.Move)
         {
-            player.Move(1);
+            if (!player.Move(cardTypeData.moveBlock))
+            {
+                return;
+            }
         }
         if (cardTypeData.cardType == CardType.Attack)
         {
@@ -44,29 +46,39 @@ public class Card : MonoBehaviour
         {
             player.Pass();
         }
-        if (cardTypeData.cardType == CardType.MakeEnemySurrender)
+        if (cardTypeData.cardType == CardType.takeAbility)
         {
             player.MakeEnemySurrender();
         }
 
-        Card[] allCards = FindObjectsOfType<Card>();
-
-        foreach (Card card in allCards)
+        for (int i = 0; i < gameManager.allCards.Count; i++)
         {
-            if (card.cardId != cardId)
+            if (gameManager.allCards[i].cardId != cardId)
             {
-                gameManager.hands.Add(card.cardTypeData);
+                gameManager.hands.Add(gameManager.allCards[i].cardTypeData);
             }
-            Destroy(card.gameObject);
+            
+            Destroy(gameManager.allCards[i].gameObject);
+        }
+        while (gameManager.allCards.Count > 0)
+        {
+            gameManager.allCards.RemoveAt(0);
         }
         gameManager.EnemyMove();
     }
 
-    private CardType GetRandomCardType()
+    private CardTypeData GetRandomCardType()
     {
+        CardTypeData data;
         CardType[] values = (CardType[])System.Enum.GetValues(typeof(CardType)); //暫定 之後程式邏輯會改
         int index = UnityEngine.Random.Range(0, values.Length);
-        return values[index];
+        data.cardType = values[index];
+        data.moveBlock = UnityEngine.Random.Range(-3, 4);
+        while (data.moveBlock == 0)
+        {
+            data.moveBlock = Random.Range(-3, 4);
+        }
+        return data;
     }
 
     private Color GetColorByType()
@@ -83,7 +95,7 @@ public class Card : MonoBehaviour
         {
             return Color.yellow;
         }
-        if (cardTypeData.cardType == CardType.MakeEnemySurrender)
+        if (cardTypeData.cardType == CardType.takeAbility)
         {
             return Color.blue;
         }

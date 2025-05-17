@@ -13,7 +13,7 @@ public class ButtonUIMove : MonoBehaviour
 
         RemoveOthers();
         Invoke("SelectMe", 1f);
-        Invoke("SelectMe", 2f);
+        //Invoke("SelectMe", 2f);
     }
 
     private void RemoveOthers()
@@ -44,7 +44,7 @@ public class ButtonUIMove : MonoBehaviour
     {
         RectTransform rt = GetComponent<RectTransform>();
 
-        rt.DOMove(new Vector2(284, this.transform.position.y), .7f);
+        rt.DOMove(new Vector2((float)Screen.width/2, this.transform.position.y), .7f);
     }
 
     private void ExecuteSkill()

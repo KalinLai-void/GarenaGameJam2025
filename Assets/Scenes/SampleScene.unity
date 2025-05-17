@@ -202,8 +202,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed770871ac097c449913d43042005d1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillHolder: {fileID: 0}
-  skills: []
+  skillHolder: {fileID: 703556323}
+  skills:
+  - {fileID: 4506883221717542243, guid: 588c868fbd3beb24c8e5fc44f83f1829, type: 3}
+  - {fileID: 4506883221717542243, guid: 93bf71f127c0a63489b2f464b3f0be22, type: 3}
+  - {fileID: 4506883221717542243, guid: b0278f6965bc316499b0a85a5b1ee2e6, type: 3}
+  - {fileID: 4506883221717542243, guid: 895c469e3d2169147b9c93be550649d3, type: 3}
 --- !u!1 &458049630
 GameObject:
   m_ObjectHideFlags: 0

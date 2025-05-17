@@ -8,12 +8,12 @@ public class GameManager : MonoBehaviour
     public Player player;
     public Dictionary<Vector3, bool> allPositions = new Dictionary<Vector3, bool>();
     public List<CardTypeData> hands;
-    private int takeAbilitySuccessRate;
-    private int additionSuccessRate;
+    public int takeAbilitySuccessRate;
+    public int additionSuccessRate;
     private int MP;
     private int currCardId;
     public List<Card> allCards;
-    private Enemy[] enemyList;
+    public List<Enemy> enemyList;
     public GameObject cardPrefab;
     private int cardsInHandCount;
     private Vector3 cardDefultPos;
@@ -25,25 +25,19 @@ public class GameManager : MonoBehaviour
         cardsInHandCount = 3;
         takeAbilitySuccessRate = 10;
         additionSuccessRate = 0;
+        MP = 3;
 
         cardDefultPos = new Vector3(0, -3, 0);
-        enemyList = FindObjectsOfType<Enemy>();
     }
 
     public void Awake()
     {
         Initialize();
     }
-    // Start is called before the first frame update
+
     void Start()
     {
         TurnProcess();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     private void TurnProcess() //回合流程
@@ -58,15 +52,20 @@ public class GameManager : MonoBehaviour
             Vector3 cardPos = new Vector3(i * 3, 0, 0) + cardDefultPos;
             GenerateCards(cardPos);
         }
-        Debug.Log("handsCount: " + hands.Count);
     }
 
     public void EnemyMove()
     {
         Debug.Log("Enemy Move");
-        foreach (Enemy enemy in enemyList)
+        Debug.Log(enemyList.Count);
+        for (int i = enemyList.Count - 1; i >= 0; i--)
         {
-            enemy.EnemyAction();
+            enemyList[i].EnemyAction();
+        }
+        if (player.healthPoint <= 0)
+        {
+            GameOver();
+            return;
         }
         TurnProcess();
     }
@@ -83,5 +82,10 @@ public class GameManager : MonoBehaviour
     public List<Card> GetAllCards()
     {
         return allCards;
+    }
+
+    private void GameOver()
+    {
+        
     }
 }

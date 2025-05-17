@@ -21,7 +21,7 @@ public class Card : MonoBehaviour
             gameManager.hands.RemoveAt(0);
         }
         ApplyColor();
-        Debug.Log("Hand: " + cardTypeData.cardType);
+        //Debug.Log("Hand: " + cardTypeData.cardType);
     }
 
     void Awake()
@@ -48,8 +48,10 @@ public class Card : MonoBehaviour
         }
         if (cardTypeData.cardType == CardType.takeAbility)
         {
-            player.MakeEnemySurrender();
+            player.TakeAbility();
         }
+
+
 
         for (int i = 0; i < gameManager.allCards.Count; i++)
         {
@@ -57,13 +59,14 @@ public class Card : MonoBehaviour
             {
                 gameManager.hands.Add(gameManager.allCards[i].cardTypeData);
             }
-            
+
             Destroy(gameManager.allCards[i].gameObject);
         }
         while (gameManager.allCards.Count > 0)
         {
             gameManager.allCards.RemoveAt(0);
         }
+        
         gameManager.EnemyMove();
     }
 

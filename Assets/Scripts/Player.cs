@@ -65,18 +65,25 @@ public class Player : MonoBehaviour
     public void TakeAbility()
     {
         int dice = Random.Range(1, 101);
-        if (dice < gameManager.takeAbilitySuccessRate + gameManager.additionSuccessRate)
+        Vector3 dir = new Vector3(facing ? 1 : -1, 0, 0);
+        if (IsEnemyInPos(dir + transform.position))
         {
-            Vector3 dir = new Vector3(facing ? 1 : -1, 0, 0);
-            if (IsEnemyInPos(dir + transform.position))
+            foreach (Enemy enemy in gameManager.enemyList)
             {
-                AttackEnemy(2000, dir + transform.position);
-
+                if (enemy.transform.position == dir + transform.position && dice < gameManager.additionSuccessRate + gameManager.takeAbilitySuccessRate + enemy.EnemyAdditionRate())
+                {
+                    AttackEnemy(2000, transform.position + dir);
+                }
             }
-            else if (IsEnemyInPos(transform.position - dir))
+        }
+        else if (IsEnemyInPos(transform.position - dir))
+        {
+            foreach (Enemy enemy in gameManager.enemyList)
             {
-                AttackEnemy(2000, transform.position - dir);
-                facing = !facing;
+                if (enemy.transform.position == dir + transform.position && dice < gameManager.additionSuccessRate + gameManager.takeAbilitySuccessRate + enemy.EnemyAdditionRate())
+                {
+                    AttackEnemy(2000, transform.position - dir);
+                }
             }
         }
         //Debug.Log("Make Enemy Surrender");

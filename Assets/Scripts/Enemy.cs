@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 public class Enemy : MonoBehaviour
 {
-
-    [SerializeField]private int enemyHealthPoint;
+    private int maxHealthPoint;
+    [SerializeField] private int enemyHealthPoint;
     private int enemyBaseAttackPower;
     private bool facing; //方向 left: false right: true
     private Player player;
@@ -14,7 +14,8 @@ public class Enemy : MonoBehaviour
 
     private void Initialize()
     {
-        enemyHealthPoint = 1;
+        maxHealthPoint = 5;
+        enemyHealthPoint = 5;
         enemyBaseAttackPower = 1;
         facing = false;
         player = FindObjectOfType<Player>();
@@ -24,7 +25,7 @@ public class Enemy : MonoBehaviour
         enemyActionDatas = new List<EnemyActionData>();
         enemyActionDatasDefult = new List<EnemyActionData>();
         EnemyAction[] values = (EnemyAction[])System.Enum.GetValues(typeof(CardType));
-        
+
         foreach (EnemyAction act in values)
         {
             EnemyActionData actData;
@@ -135,5 +136,10 @@ public class Enemy : MonoBehaviour
         {
             return true;
         }
+    }
+
+    public int EnemyAdditionRate()
+    {
+        return 100 - 100 * (maxHealthPoint - enemyHealthPoint);
     }
 }

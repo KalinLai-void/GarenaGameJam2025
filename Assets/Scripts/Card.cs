@@ -76,7 +76,7 @@ public class Card : MonoBehaviour
         CardType[] values = (CardType[])System.Enum.GetValues(typeof(CardType)); //暫定 之後程式邏輯會改
         int index = UnityEngine.Random.Range(0, values.Length);
         data.cardType = values[index];
-        data.moveBlock = UnityEngine.Random.Range(1, 4);
+        data.moveBlock = UnityEngine.Random.Range(-3, 4);
         while (data.moveBlock == 0)
         {
             data.moveBlock = Random.Range(-3, 4);

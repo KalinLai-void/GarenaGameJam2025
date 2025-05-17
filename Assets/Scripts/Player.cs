@@ -5,7 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     private bool facing; //left: false right: true
-    private int healthPoint;
+    public int healthPoint;
     private int baseAttackPower;
     private GameManager gameManager;
 

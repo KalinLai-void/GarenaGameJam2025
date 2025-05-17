@@ -113,6 +113,7 @@ public class Enemy : MonoBehaviour
     }
     private void Attack()
     {
+        player.healthPoint -= enemyBaseAttackPower;
         //Debug.Log("Enemy Attack" + enemyBaseAttackPower);
     }
 

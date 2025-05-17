@@ -62,6 +62,11 @@ public class GameManager : MonoBehaviour
         {
             enemyList[i].EnemyAction();
         }
+        if (player.healthPoint <= 0)
+        {
+            GameOver();
+            return;
+        }
         TurnProcess();
     }
 
@@ -77,5 +82,10 @@ public class GameManager : MonoBehaviour
     public List<Card> GetAllCards()
     {
         return allCards;
+    }
+
+    private void GameOver()
+    {
+        
     }
 }

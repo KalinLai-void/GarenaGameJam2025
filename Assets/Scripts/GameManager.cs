@@ -8,7 +8,11 @@ public class GameManager : MonoBehaviour
     public Player player;
     public Dictionary<Vector3, bool> allPositions = new Dictionary<Vector3, bool>();
     public List<CardTypeData> hands;
+    private int takeAbilitySuccessRate;
+    private int additionSuccessRate;
+    private int MP;
     private int currCardId;
+    public List<Card> allCards;
     private Enemy[] enemyList;  
     public GameObject cardPrefab;
     private int cardsInHandCount;
@@ -19,6 +23,9 @@ public class GameManager : MonoBehaviour
     {
         currCardId = 0;
         cardsInHandCount = 3;
+        takeAbilitySuccessRate = 10;
+        additionSuccessRate = 0;
+
         cardDefultPos = new Vector3(0, -3, 0);
         enemyList = FindObjectsOfType<Enemy>();  
     }
@@ -67,7 +74,9 @@ public class GameManager : MonoBehaviour
     private void GenerateCards(Vector3 cardPos)
     {
         cardPrefab.GetComponent<Card>().cardId = currCardId;
-        Instantiate(cardPrefab, cardPos, transform.rotation);
+        GameObject card = Instantiate(cardPrefab, cardPos, transform.rotation);
+        Card cardcom = card.GetComponent<Card>();
+        allCards.Add(cardcom);
         currCardId++;
     }
 }

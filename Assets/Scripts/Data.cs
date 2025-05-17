@@ -3,7 +3,7 @@ using UnityEngine;
 [System.Serializable]
 public enum CardType
 {
-    Move, Attack, Pass, MakeEnemySurrender
+    Move, Attack, Pass, takeAbility
 }
 [System.Serializable]
 public enum EnemyAction
@@ -15,6 +15,7 @@ public enum EnemyAction
 public struct CardTypeData
 {
     public CardType cardType;
+    public int moveBlock;
 }
 
 [System.Serializable]

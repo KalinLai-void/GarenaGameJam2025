@@ -4,6 +4,20 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    private int healthPoint;
+    private int baseAttackPower;
+
+    public void Initialize()
+    {
+        healthPoint = 30;
+        baseAttackPower = 5;
+    }
+
+    void Awake()
+    {
+        Initialize();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,8 +37,23 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void Move(int dist) 
+    public void Move(int dist)
     {
         transform.position += new Vector3(1, 0, 0) * dist;
+    }
+
+    public void Attack()
+    {
+        Debug.Log("Player Attack Damage:" + baseAttackPower);
+    }
+
+    public void Pass()
+    {
+        Debug.Log("Player Pass");
+    }
+
+    public void MakeEnemySurrender()
+    {
+        Debug.Log("Make Enemy Surrender");
     }
 }

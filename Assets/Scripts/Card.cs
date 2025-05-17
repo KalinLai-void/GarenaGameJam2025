@@ -14,12 +14,7 @@ public class Card : MonoBehaviour
     {
         player = FindFirstObjectByType<Player>().GetComponent<Player>();
         cardTypeData = GetRandomCardType();
-        gameManager = FindFirstObjectByType<GameManager>().GetComponent<GameManager>();
-        if (gameManager.hands.Count > 0)
-        {
-            cardTypeData = gameManager.hands[0];
-            gameManager.hands.RemoveAt(0);
-        }
+        gameManager = FindObjectOfType<GameManager>();
         //Debug.Log("Hand: " + cardTypeData.cardType);
     }
 

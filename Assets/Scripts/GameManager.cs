@@ -75,9 +75,17 @@ public class GameManager : MonoBehaviour
     private void GenerateCards(Vector3 cardPos)
     {
         CardTypeData data;
-        CardType[] values = (CardType[])System.Enum.GetValues(typeof(CardType)); //暫定 之後程式邏輯會改
-        int index = UnityEngine.Random.Range(0, values.Length);
-        data.cardType = values[index];
+        if (hands.Count > 0)
+        {
+            data = hands[0];
+            hands.RemoveAt(0);
+        }
+        else
+        {
+            CardType[] values = (CardType[])System.Enum.GetValues(typeof(CardType)); //暫定 之後程式邏輯會改
+            int index = UnityEngine.Random.Range(0, values.Length);
+            data.cardType = values[index];
+        }
         data.moveBlock = UnityEngine.Random.Range(-3, 4);
         while (data.moveBlock == 0)
         {

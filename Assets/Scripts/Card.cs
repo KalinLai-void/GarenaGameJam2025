@@ -20,13 +20,14 @@ public class Card : MonoBehaviour
             cardTypeData = gameManager.hands[0];
             gameManager.hands.RemoveAt(0);
         }
+        ApplyColor();
         Debug.Log("Hand: " + cardTypeData.cardType);
     }
     // Start is called before the first frame update
     void Start()
     {
         Initialize();
-        
+
     }
 
     private void OnMouseDown()
@@ -47,6 +48,7 @@ public class Card : MonoBehaviour
         {
             player.MakeEnemySurrender();
         }
+
         Card[] allCards = FindObjectsOfType<Card>();
 
         foreach (Card card in allCards)
@@ -65,5 +67,32 @@ public class Card : MonoBehaviour
         CardType[] values = (CardType[])System.Enum.GetValues(typeof(CardType)); //暫定 之後程式邏輯會改
         int index = UnityEngine.Random.Range(0, values.Length);
         return values[index];
+    }
+
+    private Color GetColorByType()
+    {
+        if (cardTypeData.cardType == CardType.Move)
+        {
+            return Color.black;
+        }
+        if (cardTypeData.cardType == CardType.Attack)
+        {
+            return Color.red;
+        }
+        if (cardTypeData.cardType == CardType.Pass)
+        {
+            return Color.yellow;
+        }
+        if (cardTypeData.cardType == CardType.MakeEnemySurrender)
+        {
+            return Color.blue;
+        }
+        return Color.white;
+    }
+
+    private void ApplyColor()
+    {
+        Renderer renderer = gameObject.GetComponent<Renderer>();
+        renderer.material.color = GetColorByType();
     }
 }

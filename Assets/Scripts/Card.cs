@@ -13,7 +13,6 @@ public class Card : MonoBehaviour
     private void Initialize()
     {
         player = FindFirstObjectByType<Player>().GetComponent<Player>();
-        cardTypeData = GetRandomCardType();
         gameManager = FindObjectOfType<GameManager>();
         //Debug.Log("Hand: " + cardTypeData.cardType);
     }
@@ -25,6 +24,14 @@ public class Card : MonoBehaviour
 
     public void OnButtonClick()
     {
+        if (gameManager.GetMP() < cardTypeData.cost)
+        {
+            return;
+        }
+        else
+        {
+            gameManager.CostMP(cardTypeData.cost);
+        }
         Invoke("PlayerMove", 1f);
         EnemyMove();
     }
@@ -33,12 +40,12 @@ public class Card : MonoBehaviour
     {
         Debug.Log("player move");
         if (cardTypeData.cardType == CardType.Move)
-        {
-            if (!player.Move(cardTypeData.moveBlock))
             {
-                return;
+                if (!player.Move(cardTypeData.moveBlock))
+                {
+                    return;
+                }
             }
-        }
         if (cardTypeData.cardType == CardType.Attack)
         {
             player.Attack();
@@ -70,20 +77,6 @@ public class Card : MonoBehaviour
     {
         Debug.Log("enemy move");
         gameManager.EnemyMove();
-    }
-
-    private CardTypeData GetRandomCardType()
-    {
-        CardTypeData data;
-        CardType[] values = (CardType[])System.Enum.GetValues(typeof(CardType)); //暫定 之後程式邏輯會改
-        int index = UnityEngine.Random.Range(0, values.Length);
-        data.cardType = values[index];
-        data.moveBlock = UnityEngine.Random.Range(-3, 4);
-        while (data.moveBlock == 0)
-        {
-            data.moveBlock = Random.Range(-3, 4);
-        }
-        return data;
     }
 
 /*

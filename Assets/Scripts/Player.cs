@@ -9,15 +9,15 @@ public class Player : MonoBehaviour
 
     public void Initialize()
     {
-        healthPoint = 30;
-        baseAttackPower = 5;
+        healthPoint = 5;
+        baseAttackPower = 2;
     }
 
     void Awake()
     {
         Initialize();
     }
-    
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.A))

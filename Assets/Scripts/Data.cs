@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
-
+[System.Serializable]
 public enum CardType
 {
     Move, Attack, Pass, MakeEnemySurrender
 }
-
+[System.Serializable]
 public enum EnemyAction
 {
     MoveLeft, MoveRight, ChangeDirection

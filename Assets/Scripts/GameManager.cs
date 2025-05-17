@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     private int MP;
     private int currCardId;
     public List<Card> allCards;
-    private Enemy[] enemyList;  
+    private Enemy[] enemyList;
     public GameObject cardPrefab;
     private int cardsInHandCount;
     private Vector3 cardDefultPos;
@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
         additionSuccessRate = 0;
 
         cardDefultPos = new Vector3(0, -3, 0);
-        enemyList = FindObjectsOfType<Enemy>();  
+        enemyList = FindObjectsOfType<Enemy>();
     }
 
     public void Awake()
@@ -78,5 +78,10 @@ public class GameManager : MonoBehaviour
         Card cardcom = card.GetComponent<Card>();
         allCards.Add(cardcom);
         currCardId++;
+    }
+
+    public List<Card> GetAllCards()
+    {
+        return allCards;
     }
 }

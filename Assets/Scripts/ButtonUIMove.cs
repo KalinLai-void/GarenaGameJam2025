@@ -7,6 +7,9 @@ using DG.Tweening;
 public class ButtonUIMove : MonoBehaviour
 {
     public float holdingTimer = 1f;
+    private float selectMeTime = 1f;
+    private float executeSkillTime = 2.7f;
+    private float removeOtherHandsTime = 3.8f;
 
 
     public void ButtonPressed()
@@ -15,8 +18,8 @@ public class ButtonUIMove : MonoBehaviour
 
 
         RemoveOthers();
-        Invoke("SelectMe", 1f);
-        Invoke("ExecuteSkill", 2.7f);
+        Invoke("SelectMe", selectMeTime);
+        Invoke("ExecuteSkill", executeSkillTime);
         //Invoke("SelectMe", 2f);
     }
 
@@ -38,7 +41,7 @@ public class ButtonUIMove : MonoBehaviour
                     ), 0.5f);
                 
                 rt.DOMove(new Vector2(rt.position.x, -140), 3f);
-                Destroy(rt.gameObject, 7f);
+                Destroy(rt.gameObject, removeOtherHandsTime);
                 
                 
             }

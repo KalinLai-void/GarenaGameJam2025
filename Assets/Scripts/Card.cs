@@ -6,6 +6,7 @@ public class Card : MonoBehaviour
 {
     public int cardId;
     public CardTypeData cardTypeData;
+    private float playerMoveTime = 1f;
     private Player player;
     private GameManager gameManager;
 
@@ -13,7 +14,6 @@ public class Card : MonoBehaviour
     private void Initialize()
     {
         player = FindFirstObjectByType<Player>().GetComponent<Player>();
-        cardTypeData = GetRandomCardType();
         gameManager = FindObjectOfType<GameManager>();
         //Debug.Log("Hand: " + cardTypeData.cardType);
     }
@@ -25,18 +25,28 @@ public class Card : MonoBehaviour
 
     public void OnButtonClick()
     {
-        Invoke("PlayerMove", 1f);
+        if (gameManager.GetMP() < cardTypeData.cost)
+        {
+            return;
+        }
+        else
+        {
+            gameManager.CostMP(cardTypeData.cost);
+        }
+        Invoke("PlayerMove", playerMoveTime);
         EnemyMove();
     }
 
     private void PlayerMove()
     {
+        bool addToDiscard = true;
         Debug.Log("player move");
         if (cardTypeData.cardType == CardType.Move)
         {
             if (!player.Move(cardTypeData.moveBlock))
             {
-                return;
+                gameManager.UseInvalidCard();
+                addToDiscard = false;
             }
         }
         if (cardTypeData.cardType == CardType.Attack)
@@ -52,9 +62,18 @@ public class Card : MonoBehaviour
             player.TakeAbility();
         }
 
+        if (addToDiscard)
+        {
+            gameManager.AddToDiscardCards(cardTypeData);
+        }
+
         for (int i = 0; i < gameManager.allCards.Count; i++)
         {
-            if (gameManager.allCards[i].cardId != cardId)
+            if (!addToDiscard)
+            {
+                gameManager.hands.Add(gameManager.allCards[i].cardTypeData);
+            }
+            else if (gameManager.allCards[i].cardId != cardId)
             {
                 gameManager.hands.Add(gameManager.allCards[i].cardTypeData);
             }
@@ -63,27 +82,12 @@ public class Card : MonoBehaviour
         {
             gameManager.allCards.RemoveAt(0);
         }
-        
     }
 
     private void EnemyMove()
     {
         Debug.Log("enemy move");
         gameManager.EnemyMove();
-    }
-
-    private CardTypeData GetRandomCardType()
-    {
-        CardTypeData data;
-        CardType[] values = (CardType[])System.Enum.GetValues(typeof(CardType)); //暫定 之後程式邏輯會改
-        int index = UnityEngine.Random.Range(0, values.Length);
-        data.cardType = values[index];
-        data.moveBlock = UnityEngine.Random.Range(-3, 4);
-        while (data.moveBlock == 0)
-        {
-            data.moveBlock = Random.Range(-3, 4);
-        }
-        return data;
     }
 
 /*

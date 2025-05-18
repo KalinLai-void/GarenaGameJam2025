@@ -1,8 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
+using System.Net.WebSockets;
+using UnityEditor.Rendering;
 using UnityEngine;
 
-
+//
 public class GameManager : MonoBehaviour
 {
     public Player player;
@@ -10,26 +13,82 @@ public class GameManager : MonoBehaviour
     public List<CardTypeData> hands;
     public int takeAbilitySuccessRate;
     public int additionSuccessRate;
+    private bool isInvalidUseCard;
     private int MP;
     private int currCardId;
+    private float enemyActionTime = 2.1f;
+    private float turnProcessTime = 3.1f;
     public List<Card> allCards;
     public List<Enemy> enemyList;
     public GameObject cardPrefab;
     private SkillUIGenerator skillUIGenerator;
     private int cardsInHandCount;
     private Vector3 cardDefultPos;
+    [SerializeField] private Deck deck;
 
 
     public void Initialize()
     {
+        isInvalidUseCard = false;
         currCardId = 0;
         cardsInHandCount = 3;
         takeAbilitySuccessRate = 10;
         additionSuccessRate = 0;
         MP = 3;
         skillUIGenerator = GetComponent<SkillUIGenerator>();
+        DeckInitialize();
 
         cardDefultPos = new Vector3(0, -3, 0);
+    }
+
+    private void DeckInitialize()
+    {
+        CardType[] values = (CardType[])System.Enum.GetValues(typeof(CardType));
+        deck.deckCards = new List<CardTypeData>();
+        deck.discardCards = new List<CardTypeData>();
+
+        foreach (CardType type in values)
+        {
+            CardTypeData data;
+            data.cardType = type;
+            data.cost = 0;
+            data.moveBlock = 0;
+            if (type == CardType.Move)
+            {
+                for (int i = -3; i <= 3; i++)
+                {
+                    if (i == 0)
+                    {
+                        continue;
+                    }
+                    data.moveBlock = i;
+                    deck.deckCards.Add(data);
+                }
+            }
+            else if (type == CardType.takeAbility)
+            {
+                data.cost = 1;
+                deck.deckCards.Add(data);
+            }
+            else
+            {
+                data.cost = 0;
+                deck.deckCards.Add(data);
+            }
+        }
+
+        Shuffle();
+    }
+
+    private void Shuffle()
+    {
+        for (int i = 0; i < deck.deckCards.Count; i++)
+        {
+            int swapIdx = Random.Range(0, deck.deckCards.Count);
+            CardTypeData tempData = deck.deckCards[i];
+            deck.deckCards[i] = deck.deckCards[swapIdx];
+            deck.deckCards[swapIdx] = tempData;
+        }
     }
 
     public void Awake()
@@ -51,18 +110,32 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < cardsInHandCount; i++)
         {
-            Vector3 cardPos = new Vector3(i * 3, 0, 0) + cardDefultPos;
-            GenerateCards(cardPos);
+            if (hands.Count > 0)
+            {
+                skillUIGenerator.GenerateSkill(hands[0], currCardId);
+                hands.RemoveAt(0);
+                currCardId++;
+            }
+            else
+            {
+                GenerateCards();
+            }
+            
         }
     }
 
     public void EnemyMove()
     {
-        Invoke("EnemyAction", 5f);
-        Invoke("TurnProcess", 6f);
+        Invoke("EnemyAction", enemyActionTime);
+        Invoke("TurnProcess", turnProcessTime);
     }
     private void EnemyAction()
     {
+        if (isInvalidUseCard)
+        {
+            isInvalidUseCard = false;
+            return;
+        }
         Debug.Log("Enemy Move");
         Debug.Log(enemyList.Count);
         for (int i = enemyList.Count - 1; i >= 0; i--)
@@ -76,27 +149,30 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void GenerateCards(Vector3 cardPos)
+    private void GenerateCards()
     {
         CardTypeData data;
-        if (hands.Count > 0)
+
+        if (deck.deckCards.Count > 0)
         {
-            data = hands[0];
-            hands.RemoveAt(0);
+            data = deck.deckCards[0];
+            deck.deckCards.RemoveAt(0);
         }
         else
         {
-            CardType[] values = (CardType[])System.Enum.GetValues(typeof(CardType)); //暫定 之後程式邏輯會改
-            int index = UnityEngine.Random.Range(0, values.Length);
-            data.cardType = values[index];
-        }
-        data.moveBlock = UnityEngine.Random.Range(-3, 4);
-        while (data.moveBlock == 0)
-        {
-            data.moveBlock = Random.Range(-3, 4);
+            deck.deckCards = deck.discardCards;
+            Shuffle();
+            deck.discardCards = new List<CardTypeData>();
+            data = deck.deckCards[0];
+            deck.deckCards.RemoveAt(0);
         }
         skillUIGenerator.GenerateSkill(data, currCardId);
         currCardId++;
+    }
+
+    public void AddToDiscardCards(CardTypeData data)
+    {
+        deck.discardCards.Add(data);
     }
     public void PushCard(Card card)
     {
@@ -106,6 +182,21 @@ public class GameManager : MonoBehaviour
     public List<Card> GetAllCards()
     {
         return allCards;
+    }
+
+    public int GetMP()
+    {
+        return MP;
+    }
+
+    public void CostMP(int cost)
+    {
+        MP -= cost;
+    }
+
+    public void UseInvalidCard()
+    {
+        isInvalidUseCard = true;
     }
 
     private void GameOver()

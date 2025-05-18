@@ -3363,6 +3363,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthPoint: 0
+  startPosition: 0
   gameManager: {fileID: 381711762}
   offsetForFlip: 0.25
 --- !u!1 &1642729106
@@ -3498,7 +3499,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyHealthPoint: 0
-  offsetForFlip: -0.25
+  startPosition: 2
+  offsetForFlip: 0.25
 --- !u!1 &1692738832
 GameObject:
   m_ObjectHideFlags: 0

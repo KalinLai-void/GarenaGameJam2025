@@ -6,6 +6,7 @@ public class Enemy : MonoBehaviour
     private int posionCount;
     private int maxHealthPoint;
     [SerializeField] private int enemyHealthPoint;
+    [SerializeField] private int startPosition = 5;
     private int enemyBaseAttackPower;
     private bool facing; //方向 left: false right: true
     private Player player;
@@ -33,7 +34,8 @@ public class Enemy : MonoBehaviour
         facing = false;
         player = FindObjectOfType<Player>();
         gameManager = FindObjectOfType<GameManager>();
-        gameManager.allPositions[transform.position] = true;
+        gameManager.allPositions[startPosition] = gameObject;
+        gameManager.enemyPositions[startPosition] = gameObject;
         gameManager.enemyList.Add(this);
         enemyActionDatas = new List<EnemyActionData>();
         enemyActionDatasDefult = new List<EnemyActionData>();
@@ -68,7 +70,7 @@ public class Enemy : MonoBehaviour
     public void Posion()
     {
         posionCount = 2;
-        
+
     }
 
     private void TriggerPosion()
@@ -92,6 +94,7 @@ public class Enemy : MonoBehaviour
                 player.GetNewPower();
             }
             gameManager.enemyList.Remove(this);
+            gameManager.enemyPositions[startPosition] = null;
             Destroy(gameObject);
             return;
         }
@@ -142,10 +145,11 @@ public class Enemy : MonoBehaviour
     }
     private void Move(int dist)
     {
-        gameManager.allPositions[transform.position] = false;
+        gameManager.allPositions[startPosition] = null;
         //transform.position += new Vector3(1, 0, 0) * dist;
         StartCoroutine("Moving", dist);
-        gameManager.allPositions[transform.position] = true;
+        startPosition += dist;
+        gameManager.allPositions[startPosition] = gameObject;
     }
     private IEnumerator Moving(int dist)
     {
@@ -172,16 +176,15 @@ public class Enemy : MonoBehaviour
     private bool IsFacingPlayer()
     {
         int dir = facing ? 1 : -1;
-        Vector3 target = new Vector3(dir, 0, 0) + transform.position;
-        return target == player.transform.position;
+        int target = dir + startPosition;
+        return target == player.GetPlayerPosition();
     }
 
     private bool IsVaildMove(int dist)
     {
-        Vector3 target = new Vector3(dist, 0, 0) + transform.position;
-        if (gameManager.allPositions.ContainsKey(target))
+        if (gameManager.allPositions.ContainsKey(startPosition + dist))
         {
-            return !gameManager.allPositions[target];
+            return !gameManager.allPositions[startPosition + dist];
         }
         else
         {
@@ -205,5 +208,10 @@ public class Enemy : MonoBehaviour
     private void TurnEnd()
     {
         isTurnEnd = true;
+    }
+
+    public int GetEnemyPosition()
+    {
+        return startPosition;
     }
 }

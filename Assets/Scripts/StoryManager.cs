@@ -13,6 +13,12 @@ public class StoryManager : MonoBehaviour
     private int storyLen = 0;
     private float playNextCharTime = 0.1f;
     private string nextSceneName = "SampleScene";
+
+    [SerializeField]
+    private GameObject messageTeller;
+    [SerializeField]
+    private GameObject mainUI;
+
     private KeyCode continueKey = KeyCode.Mouse0;
     private void Initialize()
     {
@@ -21,10 +27,17 @@ public class StoryManager : MonoBehaviour
         storyLen = StoryContent.contents.Count;
         currStoryIndex = 0;
         NextText();
+
+        
     }
     private void Awake()
     {
         Initialize();
+    }
+
+    private void OnEnable()
+    {
+        mainUI.SetActive(false);
     }
 
     void Update()
@@ -44,7 +57,9 @@ public class StoryManager : MonoBehaviour
         storyText.text = "";
         if (currStoryIndex >= storyLen)
         {
-            SceneManager.LoadScene(nextSceneName, LoadSceneMode.Additive);
+            messageTeller.SetActive(false);
+            mainUI.SetActive(true);
+            //SceneManager.LoadScene(nextSceneName, LoadSceneMode.Additive);
             return;
         }
         StartCoroutine(StoryPlay(StoryContent.contents[currStoryIndex]));

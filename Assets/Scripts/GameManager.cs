@@ -84,7 +84,8 @@ public class GameManager : MonoBehaviour
             }
             else if (type == CardType.CorrosiveVenom)
             {
-                data.cost = 2;
+                data.cost = 0;
+                deck.deckCards.Add(data);
             }
             else
             {
@@ -157,11 +158,6 @@ public class GameManager : MonoBehaviour
     private void EnemyAction()
     {
         doTurnChecking = true;
-        if (isInvalidUseCard)
-        {
-            isInvalidUseCard = false;
-            return;
-        }
         Debug.Log("Enemy Move");
         Debug.Log(enemyList.Count);
 
@@ -269,7 +265,7 @@ public class GameManager : MonoBehaviour
         isInvalidUseCard = true;
     }
 
-    public bool IsTriggerCardValid()
+    public bool IsTriggerCardInValid()
     {
         return isInvalidUseCard;
     }

@@ -28,7 +28,6 @@ public class Enemy : MonoBehaviour
     private void Initialize()
     {
         posionCount = 0;
-        maxHealthPoint = 5;
         enemyHealthPoint = 5;
         enemyBaseAttackPower = 1;
         facing = false;
@@ -85,6 +84,10 @@ public class Enemy : MonoBehaviour
 
     public void EnemyAction()
     {
+        if (gameManager.IsTriggerCardInValid())
+        {
+            return;
+        }
         TriggerPosion();
         Debug.Log("enemy action");
         if (enemyHealthPoint <= 0)
@@ -100,6 +103,7 @@ public class Enemy : MonoBehaviour
         }
         if (IsFacingPlayer())
         {
+            Invoke("TurnEnd", 1f);
             Attack();
         }
         else

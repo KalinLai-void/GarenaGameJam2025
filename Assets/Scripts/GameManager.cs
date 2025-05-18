@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
     private SkillUIGenerator skillUIGenerator;
     private int cardsInHandCount;
     private Vector3 cardDefultPos;
+    private bool isClear;
     [SerializeField] private Deck deck;
 
     private bool isPlayerTurn; // false: enemy, true: player
@@ -33,6 +34,7 @@ public class GameManager : MonoBehaviour
 
     public void Initialize()
     {
+        isClear = false;
         isInvalidUseCard = true;
         currCardId = 0;
         cardsInHandCount = 3;
@@ -123,6 +125,11 @@ public class GameManager : MonoBehaviour
 
         if (isPlayerTurn) WaitForPlayerTurnEnd();
         else WaitForEnemyTurnEnd();
+
+        if (enemyList.Count == 0)
+        {
+            isClear = true;
+        }
     }
 
     private void TurnProcess() //回合流程
@@ -267,6 +274,11 @@ public class GameManager : MonoBehaviour
     public bool IsTriggerCardInValid()
     {
         return isInvalidUseCard;
+    }
+
+    public bool IsClear()
+    {
+        return isClear;
     }
 
     private void GameOver()

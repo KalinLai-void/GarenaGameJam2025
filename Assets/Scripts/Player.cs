@@ -86,13 +86,10 @@ public class Player : MonoBehaviour
             AttackEnemy(0, transform.position - dir);
             ChangeFacingDirection();
         }
-<<<<<<< Updated upstream
         characterAnimController.TriggerAttacking();
         Debug.Log("Player Attack Damage:" + baseAttackPower);
 
         Invoke("TurnEnd", 1f);
-=======
->>>>>>> Stashed changes
     }
 
     public void Pass()

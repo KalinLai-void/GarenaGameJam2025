@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
 
     public void Initialize()
     {
-        isInvalidUseCard = false;
+        isInvalidUseCard = true;
         currCardId = 0;
         cardsInHandCount = 3;
         takeAbilitySuccessRate = 10;
@@ -75,17 +75,14 @@ public class GameManager : MonoBehaviour
             else if (type == CardType.GoblinTogetherStrong)
             {
                 data.cost = 1;
-                deck.deckCards.Add(data);
             }
             else if (type == CardType.DoubleDamage)
             {
                 data.cost = 1;
-                deck.deckCards.Add(data);
             }
             else if (type == CardType.CorrosiveVenom)
             {
                 data.cost = 2;
-                deck.deckCards.Add(data);
             }
             else
             {
@@ -128,6 +125,7 @@ public class GameManager : MonoBehaviour
 
     private void TurnProcess() //回合流程
     {
+        isInvalidUseCard = true;
         DrawCards();
     }
 
@@ -156,6 +154,7 @@ public class GameManager : MonoBehaviour
     }
     private void EnemyAction()
     {
+        doTurnChecking = true;
         if (isInvalidUseCard)
         {
             isInvalidUseCard = false;
@@ -230,6 +229,7 @@ public class GameManager : MonoBehaviour
 
     private void WaitForPlayerTurnEnd()
     {
+        Debug.Log(player.IsTurnEnd);
         if (!player.IsTurnEnd) return; // wait for player's turn end
         doTurnChecking = false;
 

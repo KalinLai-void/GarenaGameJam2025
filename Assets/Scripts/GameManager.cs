@@ -229,7 +229,7 @@ public class GameManager : MonoBehaviour
 
     private void WaitForPlayerTurnEnd()
     {
-        Debug.Log(player.IsTurnEnd);
+        //Debug.Log(player.IsTurnEnd);
         if (!player.IsTurnEnd) return; // wait for player's turn end
         doTurnChecking = false;
 

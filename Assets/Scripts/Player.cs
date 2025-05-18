@@ -218,6 +218,8 @@ public class Player : MonoBehaviour
         }
     }
 
+
+
     private void CorrsiveVenomEnemy(int extraPower, Vector3 pos)
     {
         foreach (Enemy enemy in gameManager.enemyList)

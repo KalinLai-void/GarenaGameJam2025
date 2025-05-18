@@ -35,10 +35,6 @@ public class Card : MonoBehaviour
             Invoke("PlayerMove", playerMoveTime);
             EnemyMove();
         }
-        gameManager.PlayerTurn();
-        Invoke("PlayerMove", playerMoveTime);
-        //EnemyMove();
-
     }
 
     private bool TriggerCardAction()

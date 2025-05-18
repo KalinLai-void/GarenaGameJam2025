@@ -5,6 +5,7 @@ using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class Player : MonoBehaviour
     private bool facing; //left: false right: true
     private bool doubleDamageBuff = false;
     public int healthPoint;
+
+    public Slider healthBar;
     private int baseAttackPower;
     [SerializeField] private int startPosition;
     [SerializeField] private GameManager gameManager;
@@ -32,6 +35,7 @@ public class Player : MonoBehaviour
         Debug.Log("Initialize");
         facing = true;
         healthPoint = 5;
+        healthBar.value = 5;
         baseAttackPower = 1;
         startPosition = 0;
         //gameManager = FindObjectOfType<GameManager>();
@@ -142,6 +146,7 @@ public class Player : MonoBehaviour
     {
         Debug.Log("GoblinTogetherStrong");
         healthPoint -= goblinTogetherStrongHPCost;
+        healthBar.value = healthPoint;
         gameManager.additionSuccessRate += 50;
     }
 

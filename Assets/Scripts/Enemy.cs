@@ -169,6 +169,7 @@ public class Enemy : MonoBehaviour
     {
         characterAnimController.TriggerAttacking();
         player.healthPoint -= enemyBaseAttackPower;
+        player.healthBar.value = player.healthPoint;
         //Debug.Log("Enemy Attack" + enemyBaseAttackPower);
         Invoke("TurnEnd", 1f);
     }

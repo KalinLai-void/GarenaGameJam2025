@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     public int takeAbilitySuccessRate;
     public int additionSuccessRate;
     private bool isInvalidUseCard;
-    private int MP;
+    [SerializeField] private int MP;
     private int currCardId;
     private float enemyActionTime = 2.1f;
     private float turnProcessTime = 3.1f;
@@ -70,6 +70,21 @@ public class GameManager : MonoBehaviour
             else if (type == CardType.takeAbility)
             {
                 data.cost = 1;
+                deck.deckCards.Add(data);
+            }
+            else if (type == CardType.GoblinTogetherStrong)
+            {
+                data.cost = 1;
+                deck.deckCards.Add(data);
+            }
+            else if (type == CardType.DoubleDamage)
+            {
+                data.cost = 1;
+                deck.deckCards.Add(data);
+            }
+            else if (type == CardType.CorrosiveVenom)
+            {
+                data.cost = 2;
                 deck.deckCards.Add(data);
             }
             else
@@ -250,6 +265,11 @@ public class GameManager : MonoBehaviour
     public void UseInvalidCard()
     {
         isInvalidUseCard = true;
+    }
+
+    public bool IsTriggerCardValid()
+    {
+        return isInvalidUseCard;
     }
 
     private void GameOver()

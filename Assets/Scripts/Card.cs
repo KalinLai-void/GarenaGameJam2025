@@ -27,18 +27,23 @@ public class Card : MonoBehaviour
     {
         if (gameManager.GetMP() < cardTypeData.cost)
         {
-            return;
+            gameManager.UseInvalidCard();
         }
         else
         {
             gameManager.CostMP(cardTypeData.cost);
+            Invoke("PlayerMove", playerMoveTime);
+            EnemyMove();
         }
+<<<<<<< Updated upstream
         gameManager.PlayerTurn();
         Invoke("PlayerMove", playerMoveTime);
         //EnemyMove();
+=======
+>>>>>>> Stashed changes
     }
 
-    private void PlayerMove()
+    private bool TriggerCardAction()
     {
         bool addToDiscard = true;
         Debug.Log("player move");
@@ -62,7 +67,33 @@ public class Card : MonoBehaviour
         {
             player.TakeAbility();
         }
+        if (cardTypeData.cardType == CardType.GoblinTogetherStrong)
+        {
+            player.GoblinTogetherStrong();
+        }
+        if (cardTypeData.cardType == CardType.DoubleDamage)
+        {
+            player.DoubleDamage();
+        }
+        if (cardTypeData.cardType == CardType.CorrosiveVenom)
+        {
+            player.CorrosiveVenom();
+        }
+        return addToDiscard;
+    }
 
+    private void PlayerMove()
+    {
+        bool addToDiscard;
+        if (gameManager.IsTriggerCardValid())
+        {
+            addToDiscard = TriggerCardAction();
+        }
+        else
+        {
+            addToDiscard = true;
+        }
+        
         if (addToDiscard)
         {
             gameManager.AddToDiscardCards(cardTypeData);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 public class Enemy : MonoBehaviour
 {
+    private int posionCount;
     private int maxHealthPoint;
     [SerializeField] private int enemyHealthPoint;
     private int enemyBaseAttackPower;
@@ -25,6 +26,7 @@ public class Enemy : MonoBehaviour
 
     private void Initialize()
     {
+        posionCount = 0;
         maxHealthPoint = 5;
         enemyHealthPoint = 5;
         enemyBaseAttackPower = 1;
@@ -63,8 +65,25 @@ public class Enemy : MonoBehaviour
         enemyHealthPoint -= damage;
     }
 
+    public void Posion()
+    {
+        posionCount = 2;
+        
+    }
+
+    private void TriggerPosion()
+    {
+        int posionDamage = Random.Range(1, 4);
+        if (posionCount > 0)
+        {
+            posionCount--;
+            enemyHealthPoint -= posionDamage;
+        }
+    }
+
     public void EnemyAction()
     {
+        TriggerPosion();
         Debug.Log("enemy action");
         if (enemyHealthPoint <= 0)
         {

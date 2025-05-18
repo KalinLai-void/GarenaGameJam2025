@@ -6,7 +6,9 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    private int goblinTogetherStrongHPCost = 1;
     private bool facing; //left: false right: true
+    private bool doubleDamageBuff = false;
     public int healthPoint;
     private int baseAttackPower;
     [SerializeField] private GameManager gameManager;
@@ -84,10 +86,13 @@ public class Player : MonoBehaviour
             AttackEnemy(0, transform.position - dir);
             ChangeFacingDirection();
         }
+<<<<<<< Updated upstream
         characterAnimController.TriggerAttacking();
         Debug.Log("Player Attack Damage:" + baseAttackPower);
 
         Invoke("TurnEnd", 1f);
+=======
+>>>>>>> Stashed changes
     }
 
     public void Pass()
@@ -131,7 +136,43 @@ public class Player : MonoBehaviour
     public void GoblinTogetherStrong()
     {
         Debug.Log("GoblinTogetherStrong");
+        healthPoint -= goblinTogetherStrongHPCost;
         gameManager.additionSuccessRate += 50;
+    }
+
+    public void DoubleDamage()
+    {
+        doubleDamageBuff = true;
+    }
+
+    public void CorrosiveVenom()
+    {
+        int attackRange = 3;
+        Vector3 dir = new Vector3(facing ? 1 : -1, 0, 0);
+        for (int i = 1; i <= attackRange; i++)
+        {
+            if (IsEnemyInPos(dir * i + transform.position))
+            {
+                CorrsiveVenomEnemy(0, dir * i + transform.position);
+                return;
+            }
+            if (IsEnemyInPos(transform.position - dir * i))
+            {
+                CorrsiveVenomEnemy(0, transform.position - dir * i);
+                facing = !facing;
+                return;
+            }
+        }
+    }
+
+    private int UseDoubleDamageBuff()
+    {
+        if (doubleDamageBuff)
+        {
+            doubleDamageBuff = false;
+            return 2;
+        }
+        return 1;
     }
 
     public void GetNewPower()
@@ -172,7 +213,19 @@ public class Player : MonoBehaviour
         {
             if (enemy.transform.position == pos)
             {
-                enemy.Hitten(baseAttackPower + extraPower);
+                enemy.Hitten((baseAttackPower + extraPower) * UseDoubleDamageBuff());
+                Debug.Log("enemy hitten");
+            }
+        }
+    }
+
+    private void CorrsiveVenomEnemy(int extraPower, Vector3 pos)
+    {
+        foreach (Enemy enemy in gameManager.enemyList)
+        {
+            if (enemy.transform.position == pos)
+            {
+                enemy.Posion();
                 Debug.Log("enemy hitten");
             }
         }

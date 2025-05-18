@@ -603,7 +603,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9067899510792639203, guid: 36857890ddd73d04c87e24ac0d94074f, type: 3}
       propertyPath: m_text
+<<<<<<< HEAD
       value: ROLE
+=======
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 9067899510792639203, guid: 36857890ddd73d04c87e24ac0d94074f, type: 3}
+      propertyPath: m_fontSize
+      value: 36
+>>>>>>> aa4a41869972b529f50d80a4a361331de7f2970d
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

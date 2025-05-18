@@ -146,9 +146,11 @@ public class Enemy : MonoBehaviour
     private void Move(int dist)
     {
         gameManager.allPositions[startPosition] = null;
+        gameManager.enemyPositions[startPosition] = null;
         //transform.position += new Vector3(1, 0, 0) * dist;
         StartCoroutine("Moving", dist);
         startPosition += dist;
+        gameManager.enemyPositions[startPosition] = gameObject;
         gameManager.allPositions[startPosition] = gameObject;
     }
     private IEnumerator Moving(int dist)

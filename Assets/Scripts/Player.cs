@@ -67,6 +67,10 @@ public class Player : MonoBehaviour
             gameManager.allPositions[startPosition] = gameObject;
             return true;
         }
+        else
+        {
+            Invoke("TurnEnd", 1f);
+        }
         return false;
     }
 
@@ -196,13 +200,10 @@ public class Player : MonoBehaviour
         int dir = dist / distAbs;
         for (int i = 1; i <= distAbs; i++)
         {
-            int target = dir + startPosition;
-            if (gameManager.allPositions.ContainsKey(startPosition))
+            int target = dir * i + startPosition;
+            if (IsEnemyInPos(target))
             {
-                if (gameManager.allPositions[startPosition])
-                {
-                    return false;
-                }
+                return false;
             }
         }
         return true;

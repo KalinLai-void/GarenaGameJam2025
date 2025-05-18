@@ -36,7 +36,7 @@ public class Player : MonoBehaviour
         facing = true;
         healthPoint = 5;
         healthBar.value = 5;
-        baseAttackPower = 1;
+        baseAttackPower = 3;
         startPosition = 0;
         //gameManager = FindObjectOfType<GameManager>();
         characterAnimController = GetComponent<CharacterAnimController>();

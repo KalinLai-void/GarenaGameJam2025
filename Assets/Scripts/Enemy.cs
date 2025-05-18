@@ -84,10 +84,6 @@ public class Enemy : MonoBehaviour
 
     public void EnemyAction()
     {
-        if (gameManager.IsTriggerCardInValid())
-        {
-            return;
-        }
         TriggerPosion();
         Debug.Log("enemy action");
         if (enemyHealthPoint <= 0)

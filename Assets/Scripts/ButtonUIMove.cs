@@ -52,6 +52,7 @@ public class ButtonUIMove : MonoBehaviour
     {
         RectTransform rt = GetComponent<RectTransform>();
 
+        Debug.Log("Hi");
         rt.DOMove(new Vector2((float)Screen.width/2, this.transform.position.y), .7f);
 
         ExecuteSkill();

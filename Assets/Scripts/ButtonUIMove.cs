@@ -13,6 +13,9 @@ public class ButtonUIMove : MonoBehaviour
     private float executeSkillTime = 1.7f;
     private float removeOtherHandsTime = 3.1f;
 
+
+    public GameObject description;
+    public Transform descriptionHolder;
     
 
 
@@ -107,6 +110,28 @@ public class ButtonUIMove : MonoBehaviour
         
         GetComponentInParent<HorizontalLayoutGroup>().enabled = true;
         Destroy(this.gameObject); //�ɶ��i�H��
+    }
+
+
+
+    public void GenerateDescription()
+    {
+        descriptionHolder = GameObject.Find("NoteHolder").transform;
+        if (descriptionHolder.childCount != 0) Destroy(descriptionHolder.GetChild(0).gameObject);
+        
+        GameObject _description = Instantiate(description, descriptionHolder);
+
+        
+
+    }
+
+    public void RemoveDescription()
+    {
+
+
+
+        descriptionHolder = GameObject.Find("NoteHolder").transform;
+        if (descriptionHolder.childCount != 0) Destroy(descriptionHolder.GetChild(0).gameObject);
     }
 
    

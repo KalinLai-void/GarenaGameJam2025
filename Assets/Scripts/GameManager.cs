@@ -85,7 +85,6 @@ public class GameManager : MonoBehaviour
             else if (type == CardType.CorrosiveVenom)
             {
                 data.cost = 0;
-                deck.deckCards.Add(data);
             }
             else
             {

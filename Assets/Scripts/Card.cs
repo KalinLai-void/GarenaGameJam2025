@@ -39,14 +39,16 @@ public class Card : MonoBehaviour
 
     private void PlayerMove()
     {
+        bool addToDiscard = true;
         Debug.Log("player move");
         if (cardTypeData.cardType == CardType.Move)
+        {
+            if (!player.Move(cardTypeData.moveBlock))
             {
-                if (!player.Move(cardTypeData.moveBlock))
-                {
-                    return;
-                }
+                gameManager.UseInvalidCard();
+                addToDiscard = false;
             }
+        }
         if (cardTypeData.cardType == CardType.Attack)
         {
             player.Attack();
@@ -60,11 +62,18 @@ public class Card : MonoBehaviour
             player.TakeAbility();
         }
 
-        gameManager.AddToDiscardCards(cardTypeData);
+        if (addToDiscard)
+        {
+            gameManager.AddToDiscardCards(cardTypeData);
+        }
 
         for (int i = 0; i < gameManager.allCards.Count; i++)
         {
-            if (gameManager.allCards[i].cardId != cardId)
+            if (!addToDiscard)
+            {
+                gameManager.hands.Add(gameManager.allCards[i].cardTypeData);
+            }
+            else if (gameManager.allCards[i].cardId != cardId)
             {
                 gameManager.hands.Add(gameManager.allCards[i].cardTypeData);
             }
@@ -73,7 +82,6 @@ public class Card : MonoBehaviour
         {
             gameManager.allCards.RemoveAt(0);
         }
-        
     }
 
     private void EnemyMove()

@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public List<CardTypeData> hands;
     public int takeAbilitySuccessRate;
     public int additionSuccessRate;
+    private bool isInvalidUseCard;
     private int MP;
     private int currCardId;
     private float enemyActionTime = 2.1f;
@@ -28,6 +29,7 @@ public class GameManager : MonoBehaviour
 
     public void Initialize()
     {
+        isInvalidUseCard = false;
         currCardId = 0;
         cardsInHandCount = 3;
         takeAbilitySuccessRate = 10;
@@ -129,6 +131,11 @@ public class GameManager : MonoBehaviour
     }
     private void EnemyAction()
     {
+        if (isInvalidUseCard)
+        {
+            isInvalidUseCard = false;
+            return;
+        }
         Debug.Log("Enemy Move");
         Debug.Log(enemyList.Count);
         for (int i = enemyList.Count - 1; i >= 0; i--)
@@ -185,6 +192,11 @@ public class GameManager : MonoBehaviour
     public void CostMP(int cost)
     {
         MP -= cost;
+    }
+
+    public void UseInvalidCard()
+    {
+        isInvalidUseCard = true;
     }
 
     private void GameOver()

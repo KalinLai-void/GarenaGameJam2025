@@ -33,19 +33,20 @@ public class Card : MonoBehaviour
             gameManager.CostMP(cardTypeData.cost);
         }
         Invoke("PlayerMove", 1f);
-        EnemyMove();
+        //EnemyMove();
+        gameManager.PlayerTurn();
     }
 
     private void PlayerMove()
     {
         Debug.Log("player move");
         if (cardTypeData.cardType == CardType.Move)
+        {
+            if (!player.Move(cardTypeData.moveBlock))
             {
-                if (!player.Move(cardTypeData.moveBlock))
-                {
-                    return;
-                }
+                return;
             }
+        }
         if (cardTypeData.cardType == CardType.Attack)
         {
             player.Attack();
@@ -75,11 +76,11 @@ public class Card : MonoBehaviour
         
     }
 
-    private void EnemyMove()
+    /*private void EnemyMove()
     {
         Debug.Log("enemy move");
         gameManager.EnemyMove();
-    }
+    }*/
 
 /*
         private Color GetColorByType()

@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -7,7 +9,17 @@ public class Player : MonoBehaviour
     private bool facing; //left: false right: true
     public int healthPoint;
     private int baseAttackPower;
-    private GameManager gameManager;
+    [SerializeField] private GameManager gameManager;
+    private CharacterAnimController characterAnimController;
+
+    private bool isTurnEnd = false;
+    public bool IsTurnEnd { 
+        set { isTurnEnd = value; }
+        get { return isTurnEnd; } 
+    }
+
+    [Header("Art")]
+    [SerializeField] private float offsetForFlip = 0.25f;
 
     public void Initialize()
     {
@@ -15,7 +27,8 @@ public class Player : MonoBehaviour
         facing = true;
         healthPoint = 5;
         baseAttackPower = 1;
-        gameManager = FindObjectOfType<GameManager>();
+        //gameManager = FindObjectOfType<GameManager>();
+        characterAnimController = GetComponent<CharacterAnimController>();
     }
 
     void Awake()
@@ -30,18 +43,33 @@ public class Player : MonoBehaviour
         {
             if (dist > 0)
             {
-                facing = true;
+                if (!facing) ChangeFacingDirection();
             }
             else
             {
-                facing = false;
+                if (facing) ChangeFacingDirection();
             }
             gameManager.allPositions[transform.position] = false;
-            transform.position += new Vector3(1, 0, 0) * dist;
+            //transform.position += new Vector3(1, 0, 0) * dist;
+            StartCoroutine("PlayerMoving", dist);
             gameManager.allPositions[transform.position] = true;
             return true;
         }
         return false;
+    }
+
+    private IEnumerator PlayerMoving(int dist)
+    {
+        Debug.Log(dist);
+        characterAnimController.SetIsMoveing(true);
+        Vector3 targetPos = transform.position + new Vector3(1, 0, 0) * dist;
+        while (Vector3.Distance(transform.position, targetPos) > 0.001f)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, targetPos, Time.deltaTime);
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
+        characterAnimController.SetIsMoveing(false);
+        Invoke("TurnEnd", 1f);
     }
 
     public void Attack()
@@ -54,19 +82,23 @@ public class Player : MonoBehaviour
         else if (IsEnemyInPos(transform.position - dir))
         {
             AttackEnemy(0, transform.position - dir);
-            facing = !facing;
+            ChangeFacingDirection();
         }
+        characterAnimController.TriggerAttacking();
         Debug.Log("Player Attack Damage:" + baseAttackPower);
+
+        Invoke("TurnEnd", 1f);
     }
 
     public void Pass()
     {
         Debug.Log("Player Pass");
+        Invoke("TurnEnd", 1f);
     }
 
     public void TakeAbility()
     {
-        int dice = Random.Range(1, 101);
+        int dice = UnityEngine.Random.Range(1, 101);
         Vector3 dir = new Vector3(facing ? 1 : -1, 0, 0);
         if (IsEnemyInPos(dir + transform.position))
         {
@@ -89,6 +121,7 @@ public class Player : MonoBehaviour
             }
         }
         Debug.Log("Make Enemy Surrender");
+        Invoke("TurnEnd", 1f);
     }
     public void GetNewPower()
     {
@@ -132,5 +165,18 @@ public class Player : MonoBehaviour
                 Debug.Log("enemy hitten");
             }
         }
+    }
+
+    private void ChangeFacingDirection()
+    {
+        facing = !facing;
+        transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
+        if (facing) transform.position += new Vector3(offsetForFlip, 0, 0);
+        else transform.position += new Vector3(-offsetForFlip, 0, 0);
+    }
+
+    private void TurnEnd()
+    {
+        isTurnEnd = true;
     }
 }

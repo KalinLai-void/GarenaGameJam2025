@@ -38,11 +38,18 @@ public class ButtonUIMove : MonoBehaviour
                     ), 0.5f);
                 
                 rt.DOMove(new Vector2(rt.position.x, -140), 3f);
-                Destroy(rt.gameObject, 7f);
+                StartCoroutine(HideCard(rt.gameObject, 3f));
+                Destroy(rt.gameObject, 3.1f);
                 
                 
             }
         }
+    }
+
+    private IEnumerator HideCard(GameObject obj, float secs)
+    {
+        yield return new WaitForSeconds(secs);
+        obj.SetActive(false);
     }
 
     private void SelectMe()

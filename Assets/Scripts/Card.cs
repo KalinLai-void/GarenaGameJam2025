@@ -6,7 +6,7 @@ public class Card : MonoBehaviour
 {
     public int cardId;
     public CardTypeData cardTypeData;
-    private float playerMoveTime = 0.5f;
+    private float playerMoveTime = 1f;
     private Player player;
     private GameManager gameManager;
 
@@ -32,16 +32,17 @@ public class Card : MonoBehaviour
         else
         {
             gameManager.CostMP(cardTypeData.cost);
-            gameManager.PlayerTurn();
             Invoke("PlayerMove", playerMoveTime);
+            EnemyMove();
         }
-        
+        gameManager.PlayerTurn();
+        Invoke("PlayerMove", playerMoveTime);
         //EnemyMove();
+
     }
 
     private bool TriggerCardAction()
     {
-        Debug.Log("Trigger Card");
         bool addToDiscard = true;
         Debug.Log("player move");
         if (cardTypeData.cardType == CardType.Move)
@@ -90,7 +91,7 @@ public class Card : MonoBehaviour
         {
             addToDiscard = true;
         }
-
+        
         if (addToDiscard)
         {
             gameManager.AddToDiscardCards(cardTypeData);

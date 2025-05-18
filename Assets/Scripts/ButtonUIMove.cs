@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using Coffee.UIEffectInternal;
+using Coffee.UIEffects;
 
 public class ButtonUIMove : MonoBehaviour
 {
@@ -10,6 +12,8 @@ public class ButtonUIMove : MonoBehaviour
     private float selectMeTime = 1f;
     private float executeSkillTime = 2.7f;
     private float removeOtherHandsTime = 3.1f;
+
+    
 
 
     public void ButtonPressed()
@@ -19,7 +23,7 @@ public class ButtonUIMove : MonoBehaviour
 
         RemoveOthers();
         Invoke("SelectMe", selectMeTime);
-        Invoke("ExecuteSkill", executeSkillTime);
+        //Invoke("ExecuteSkill", executeSkillTime);
         //Invoke("SelectMe", 2f);
     }
 
@@ -59,7 +63,7 @@ public class ButtonUIMove : MonoBehaviour
     {
         RectTransform rt = GetComponent<RectTransform>();
 
-        Debug.Log("Hi");
+        //Debug.Log("Hi");
         rt.DOMove(new Vector2((float)Screen.width/2, this.transform.position.y), .7f);
 
         ExecuteSkill();
@@ -71,16 +75,29 @@ public class ButtonUIMove : MonoBehaviour
 
         Image skillImage = this.GetComponent<Image>();
 
-        rt.DOMove(new Vector2(rt.position.x, (float)Screen.width/2), 1f);
+        //rt.DOMove(new Vector2(rt.position.x, (float)Screen.width/2), 1f);
+
+        
+
+        //rt.DOMove(new Vector2((float)Screen.width / 2, this.transform.position.y), .7f);
 
         GetComponent<Card>().OnButtonClick();
-        RemoveMe(1.1f);
+
+        Invoke("SelfDissolve", 1f);
+        //RemoveMe(1.1f);
     }
 
-    private void RemoveMe(float destroyTime = 1f)
+    private void SelfDissolve()
     {
+        GetComponent<UIEffect>().enabled = true;
+        Invoke("RemoveMe", 1f);
+    }
+
+    private void RemoveMe()
+    {
+        
         GetComponentInParent<HorizontalLayoutGroup>().enabled = true;
-        Destroy(this.gameObject, destroyTime); //�ɶ��i�H��
+        Destroy(this.gameObject); //�ɶ��i�H��
     }
 
    

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Net.WebSockets;
+using System.Reflection;
 using UnityEditor.Rendering;
 using UnityEngine;
 
@@ -9,7 +10,8 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public Player player;
-    public Dictionary<Vector3, bool> allPositions = new Dictionary<Vector3, bool>();
+    public Dictionary<int, GameObject> allPositions = new Dictionary<int, GameObject>();
+    public Dictionary<int, GameObject> enemyPositions = new Dictionary<int, GameObject>();
     public List<CardTypeData> hands;
     public int takeAbilitySuccessRate;
     public int additionSuccessRate;

@@ -2,7 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
+using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -10,14 +13,18 @@ public class Player : MonoBehaviour
     private bool facing; //left: false right: true
     private bool doubleDamageBuff = false;
     public int healthPoint;
+
+    public Slider healthBar;
     private int baseAttackPower;
+    [SerializeField] private int startPosition;
     [SerializeField] private GameManager gameManager;
     private CharacterAnimController characterAnimController;
 
     private bool isTurnEnd = false;
-    public bool IsTurnEnd { 
+    public bool IsTurnEnd
+    {
         set { isTurnEnd = value; }
-        get { return isTurnEnd; } 
+        get { return isTurnEnd; }
     }
 
     [Header("Art")]
@@ -28,7 +35,9 @@ public class Player : MonoBehaviour
         Debug.Log("Initialize");
         facing = true;
         healthPoint = 5;
+        healthBar.value = 5;
         baseAttackPower = 1;
+        startPosition = 0;
         //gameManager = FindObjectOfType<GameManager>();
         characterAnimController = GetComponent<CharacterAnimController>();
     }
@@ -51,10 +60,11 @@ public class Player : MonoBehaviour
             {
                 if (facing) ChangeFacingDirection();
             }
-            gameManager.allPositions[transform.position] = false;
+            gameManager.allPositions[startPosition] = null;
             //transform.position += new Vector3(1, 0, 0) * dist;
             StartCoroutine("PlayerMoving", dist);
-            gameManager.allPositions[transform.position] = true;
+            startPosition += dist;
+            gameManager.allPositions[startPosition] = gameObject;
             return true;
         }
         return false;
@@ -76,14 +86,14 @@ public class Player : MonoBehaviour
 
     public void Attack()
     {
-        Vector3 dir = new Vector3(facing ? 1 : -1, 0, 0);
-        if (IsEnemyInPos(dir + transform.position))
+        int dir = facing ? 1 : -1;
+        if (IsEnemyInPos(dir + startPosition))
         {
-            AttackEnemy(0, dir + transform.position);
+            AttackEnemy(0, dir + startPosition);
         }
-        else if (IsEnemyInPos(transform.position - dir))
+        else if (IsEnemyInPos(startPosition - dir))
         {
-            AttackEnemy(0, transform.position - dir);
+            AttackEnemy(0, startPosition - dir);
             ChangeFacingDirection();
         }
 
@@ -103,14 +113,14 @@ public class Player : MonoBehaviour
     public void TakeAbility()
     {
         int dice = UnityEngine.Random.Range(1, 101);
-        Vector3 dir = new Vector3(facing ? 1 : -1, 0, 0);
-        if (IsEnemyInPos(dir + transform.position))
+        int dir = facing ? 1 : -1;
+        if (IsEnemyInPos(dir + startPosition))
         {
             foreach (Enemy enemy in gameManager.enemyList)
             {
-                if (enemy.transform.position == dir + transform.position && dice < gameManager.additionSuccessRate + gameManager.takeAbilitySuccessRate + enemy.EnemyAdditionRate())
+                if (enemy.GetEnemyPosition() == dir + startPosition && dice < gameManager.additionSuccessRate + gameManager.takeAbilitySuccessRate + enemy.EnemyAdditionRate())
                 {
-                    AttackEnemy(2000, transform.position + dir);
+                    AttackEnemy(2000, startPosition + dir);
                 }
             }
             if (gameManager.additionSuccessRate > 0)
@@ -118,13 +128,13 @@ public class Player : MonoBehaviour
                 gameManager.additionSuccessRate = 0;
             }
         }
-        else if (IsEnemyInPos(transform.position - dir))
+        else if (IsEnemyInPos(startPosition - dir))
         {
             foreach (Enemy enemy in gameManager.enemyList)
             {
-                if (enemy.transform.position == dir + transform.position && dice < gameManager.additionSuccessRate + gameManager.takeAbilitySuccessRate + enemy.EnemyAdditionRate())
+                if (enemy.GetEnemyPosition() == startPosition - dir && dice < gameManager.additionSuccessRate + gameManager.takeAbilitySuccessRate + enemy.EnemyAdditionRate())
                 {
-                    AttackEnemy(2000, transform.position - dir);
+                    AttackEnemy(2000, startPosition - dir);
                 }
             }
         }
@@ -136,6 +146,7 @@ public class Player : MonoBehaviour
     {
         Debug.Log("GoblinTogetherStrong");
         healthPoint -= goblinTogetherStrongHPCost;
+        healthBar.value = healthPoint;
         gameManager.additionSuccessRate += 50;
     }
 
@@ -147,17 +158,17 @@ public class Player : MonoBehaviour
     public void CorrosiveVenom()
     {
         int attackRange = 3;
-        Vector3 dir = new Vector3(facing ? 1 : -1, 0, 0);
+        int dir = facing ? 1 : -1;
         for (int i = 1; i <= attackRange; i++)
         {
-            if (IsEnemyInPos(dir * i + transform.position))
+            if (IsEnemyInPos(dir * i + startPosition))
             {
-                CorrsiveVenomEnemy(0, dir * i + transform.position);
+                CorrsiveVenomEnemy(0, dir * i + startPosition);
                 return;
             }
-            if (IsEnemyInPos(transform.position - dir * i))
+            if (IsEnemyInPos(startPosition - dir * i))
             {
-                CorrsiveVenomEnemy(0, transform.position - dir * i);
+                CorrsiveVenomEnemy(0, startPosition - dir * i);
                 facing = !facing;
                 return;
             }
@@ -181,23 +192,28 @@ public class Player : MonoBehaviour
 
     private bool IsVaildMove(int dist)
     {
-        Vector3 target = new Vector3(dist, 0, 0) + transform.position;
-        if (gameManager.allPositions.ContainsKey(target))
+        int distAbs = (dist < 0) ? -dist : dist;
+        int dir = dist / distAbs;
+        for (int i = 1; i <= distAbs; i++)
         {
-            return !gameManager.allPositions[target];
+            int target = dir + startPosition;
+            if (gameManager.allPositions.ContainsKey(startPosition))
+            {
+                if (gameManager.allPositions[startPosition])
+                {
+                    return false;
+                }
+            }
         }
-        else
-        {
-            return true;
-        }
+        return true;
     }
 
-    private bool IsEnemyInPos(Vector3 pos)
+    private bool IsEnemyInPos(int pos)
     {
         Debug.Log("IsEnemyInPos");
         foreach (Enemy enemy in gameManager.enemyList)
         {
-            if (enemy.transform.position == pos)
+            if (enemy.GetEnemyPosition() == pos)
             {
                 return true;
             }
@@ -205,12 +221,12 @@ public class Player : MonoBehaviour
         return false;
     }
 
-    private void AttackEnemy(int extraPower, Vector3 pos)
+    private void AttackEnemy(int extraPower, int pos)
     {
         Debug.Log("attackEnemy");
         foreach (Enemy enemy in gameManager.enemyList)
         {
-            if (enemy.transform.position == pos)
+            if (enemy.GetEnemyPosition() == pos)
             {
                 enemy.Hitten((baseAttackPower + extraPower) * UseDoubleDamageBuff());
                 Debug.Log("enemy hitten");
@@ -220,11 +236,11 @@ public class Player : MonoBehaviour
 
 
 
-    private void CorrsiveVenomEnemy(int extraPower, Vector3 pos)
+    private void CorrsiveVenomEnemy(int extraPower, int pos)
     {
         foreach (Enemy enemy in gameManager.enemyList)
         {
-            if (enemy.transform.position == pos)
+            if (enemy.GetEnemyPosition() == pos)
             {
                 enemy.Posion();
                 Debug.Log("enemy hitten");
@@ -243,5 +259,10 @@ public class Player : MonoBehaviour
     private void TurnEnd()
     {
         isTurnEnd = true;
+    }
+
+    public int GetPlayerPosition()
+    {
+        return startPosition;
     }
 }

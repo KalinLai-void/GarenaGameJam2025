@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class SkillUIGenerator : MonoBehaviour
 {
@@ -35,6 +36,8 @@ public class SkillUIGenerator : MonoBehaviour
                 if (data.cardType == CardType.Move)
                 {
                     _skillButton.GetComponent<Card>().cardTypeData.moveBlock = data.moveBlock;
+
+                    _skillButton.transform.GetChild(0).GetComponent<TMP_Text>().text = data.moveBlock.ToString();
                 }
             }
         } 

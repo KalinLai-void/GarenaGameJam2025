@@ -28,7 +28,7 @@ public class Enemy : MonoBehaviour
     private void Initialize()
     {
         posionCount = 0;
-        enemyHealthPoint = 5;
+        //enemyHealthPoint = 5;
         enemyBaseAttackPower = 1;
         facing = false;
         player = FindObjectOfType<Player>();

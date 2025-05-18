@@ -6,6 +6,7 @@ public class Card : MonoBehaviour
 {
     public int cardId;
     public CardTypeData cardTypeData;
+    private float playerMoveTime = 1f;
     private Player player;
     private GameManager gameManager;
 
@@ -32,7 +33,7 @@ public class Card : MonoBehaviour
         {
             gameManager.CostMP(cardTypeData.cost);
         }
-        Invoke("PlayerMove", 1f);
+        Invoke("PlayerMove", playerMoveTime);
         EnemyMove();
     }
 

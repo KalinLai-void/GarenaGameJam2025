@@ -5,7 +5,7 @@ using System.Net.WebSockets;
 using UnityEditor.Rendering;
 using UnityEngine;
 
-
+//
 public class GameManager : MonoBehaviour
 {
     public Player player;
@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
     public int additionSuccessRate;
     private int MP;
     private int currCardId;
+    private float enemyActionTime = 2.1f;
+    private float turnProcessTime = 3.1f;
     public List<Card> allCards;
     public List<Enemy> enemyList;
     public GameObject cardPrefab;
@@ -122,8 +124,8 @@ public class GameManager : MonoBehaviour
 
     public void EnemyMove()
     {
-        Invoke("EnemyAction", 4.7f);
-        Invoke("TurnProcess", 5.7f);
+        Invoke("EnemyAction", enemyActionTime);
+        Invoke("TurnProcess", turnProcessTime);
     }
     private void EnemyAction()
     {

@@ -10,7 +10,7 @@ public class ButtonUIMove : MonoBehaviour
 {
     public float holdingTimer = 1f;
     private float selectMeTime = 1f;
-    private float executeSkillTime = 2.7f;
+    private float executeSkillTime = 1.7f;
     private float removeOtherHandsTime = 3.1f;
 
     
@@ -23,7 +23,7 @@ public class ButtonUIMove : MonoBehaviour
 
         RemoveOthers();
         Invoke("SelectMe", selectMeTime);
-        //Invoke("ExecuteSkill", executeSkillTime);
+        Invoke("ExecuteSkill", executeSkillTime);
         //Invoke("SelectMe", 2f);
     }
 
@@ -66,7 +66,7 @@ public class ButtonUIMove : MonoBehaviour
         //Debug.Log("Hi");
         rt.DOMove(new Vector2((float)Screen.width/2, this.transform.position.y), .7f);
 
-        ExecuteSkill();
+        //ExecuteSkill();
     }
 
     private void ExecuteSkill()
@@ -89,7 +89,16 @@ public class ButtonUIMove : MonoBehaviour
 
     private void SelfDissolve()
     {
-        GetComponent<UIEffect>().enabled = true;
+        Debug.Log("A");
+        var effect = this.gameObject.AddComponent<UIEffect>();
+
+        // Apply a runtime preset
+        effect.LoadPreset("Transition-Burn");
+
+        // Set the effect parameters
+        effect.transitionWidth = 0.1f;
+        effect.transitionColor = Color.red;
+        effect.transitionAutoPlaySpeed = 0.7f;
         Invoke("RemoveMe", 1f);
     }
 

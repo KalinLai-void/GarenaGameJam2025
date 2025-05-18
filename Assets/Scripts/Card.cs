@@ -34,7 +34,6 @@ public class Card : MonoBehaviour
             gameManager.CostMP(cardTypeData.cost);
             Invoke("PlayerMove", playerMoveTime);
             gameManager.PlayerTurn();
-            EnemyMove();
         }
     }
 

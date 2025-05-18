@@ -11,9 +11,9 @@ public class CharacterAnimController : MonoBehaviour
         _animator = GetComponent<Animator>();
     }
 
-    public void SetIsAttacking(bool bIsAttacking)
+    public void TriggerAttacking()
     {
-        _animator.SetBool("isAttacking", bIsAttacking);
+        _animator.SetTrigger("isAttacking");
     }
 
     public void SetIsMoveing(bool bIsMoveing)

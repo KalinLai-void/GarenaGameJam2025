@@ -9,7 +9,7 @@ public class ButtonUIMove : MonoBehaviour
     public float holdingTimer = 1f;
     private float selectMeTime = 1f;
     private float executeSkillTime = 2.7f;
-    private float removeOtherHandsTime = 3.8f;
+    private float removeOtherHandsTime = 3.1f;
 
 
     public void ButtonPressed()
@@ -41,11 +41,18 @@ public class ButtonUIMove : MonoBehaviour
                     ), 0.5f);
                 
                 rt.DOMove(new Vector2(rt.position.x, -140), 3f);
+                StartCoroutine(HideCard(rt.gameObject, 2.9f));
                 Destroy(rt.gameObject, removeOtherHandsTime);
                 
                 
             }
         }
+    }
+
+    private IEnumerator HideCard(GameObject obj, float secs)
+    {
+        yield return new WaitForSeconds(secs);
+        obj.SetActive(false);
     }
 
     private void SelectMe()

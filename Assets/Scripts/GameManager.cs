@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     public int takeAbilitySuccessRate;
     public int additionSuccessRate;
     private bool isInvalidUseCard;
-    private int MP;
+    [SerializeField] private int MP;
     private int currCardId;
     private float enemyActionTime = 2.1f;
     private float turnProcessTime = 3.1f;
@@ -26,6 +26,8 @@ public class GameManager : MonoBehaviour
     private Vector3 cardDefultPos;
     [SerializeField] private Deck deck;
 
+    private bool isPlayerTurn; // false: enemy, true: player
+    private bool doTurnChecking = false;
 
     public void Initialize()
     {
@@ -70,6 +72,21 @@ public class GameManager : MonoBehaviour
                 data.cost = 1;
                 deck.deckCards.Add(data);
             }
+            else if (type == CardType.GoblinTogetherStrong)
+            {
+                data.cost = 1;
+                deck.deckCards.Add(data);
+            }
+            else if (type == CardType.DoubleDamage)
+            {
+                data.cost = 1;
+                deck.deckCards.Add(data);
+            }
+            else if (type == CardType.CorrosiveVenom)
+            {
+                data.cost = 2;
+                deck.deckCards.Add(data);
+            }
             else
             {
                 data.cost = 0;
@@ -99,6 +116,14 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         TurnProcess();
+    }
+
+    private void Update()
+    {
+        if (!doTurnChecking) return;
+
+        if (isPlayerTurn) WaitForPlayerTurnEnd();
+        else WaitForEnemyTurnEnd();
     }
 
     private void TurnProcess() //回合流程
@@ -138,6 +163,9 @@ public class GameManager : MonoBehaviour
         }
         Debug.Log("Enemy Move");
         Debug.Log(enemyList.Count);
+
+        isPlayerTurn = false;
+        doTurnChecking = true;
         for (int i = enemyList.Count - 1; i >= 0; i--)
         {
             enemyList[i].EnemyAction();
@@ -194,9 +222,54 @@ public class GameManager : MonoBehaviour
         MP -= cost;
     }
 
+    public void PlayerTurn()
+    {
+        doTurnChecking = true;
+        isPlayerTurn = true;
+    }
+
+    private void WaitForPlayerTurnEnd()
+    {
+        if (!player.IsTurnEnd) return; // wait for player's turn end
+        doTurnChecking = false;
+
+        Invoke("EnemyAction", 0.5f);
+    }
+
+    private void WaitForEnemyTurnEnd()
+    {
+        // wait for enemies's turn end
+        foreach (Enemy enemy in enemyList)
+        {
+            if (!enemy.IsTurnEnd)
+            {
+                return;
+            }
+        }
+
+        ResetTurn();        
+        Invoke("TurnProcess", 0.5f);
+    }
+
+    private void ResetTurn()
+    {
+        doTurnChecking = false;
+        isPlayerTurn = true;
+        player.IsTurnEnd = false;
+        foreach (Enemy enemy in enemyList)
+        {
+            enemy.IsTurnEnd = false;
+        }
+    }
+
     public void UseInvalidCard()
     {
         isInvalidUseCard = true;
+    }
+
+    public bool IsTriggerCardValid()
+    {
+        return isInvalidUseCard;
     }
 
     private void GameOver()

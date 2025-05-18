@@ -3,7 +3,7 @@ using UnityEngine;
 [System.Serializable]
 public enum CardType
 {
-    Move, Attack, Pass, takeAbility, GoblinTogetherStrong
+    Move, Attack, Pass, takeAbility, GoblinTogetherStrong, DoubleDamage, CorrosiveVenom
 }
 [System.Serializable]
 public enum EnemyAction

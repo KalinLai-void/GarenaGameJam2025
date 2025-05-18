@@ -5,7 +5,7 @@ using System.Net.WebSockets;
 using UnityEditor.Rendering;
 using UnityEngine;
 
-
+//
 public class GameManager : MonoBehaviour
 {
     public Player player;
@@ -13,8 +13,11 @@ public class GameManager : MonoBehaviour
     public List<CardTypeData> hands;
     public int takeAbilitySuccessRate;
     public int additionSuccessRate;
+    private bool isInvalidUseCard;
     private int MP;
     private int currCardId;
+    private float enemyActionTime = 2.1f;
+    private float turnProcessTime = 3.1f;
     public List<Card> allCards;
     public List<Enemy> enemyList;
     public GameObject cardPrefab;
@@ -28,6 +31,7 @@ public class GameManager : MonoBehaviour
 
     public void Initialize()
     {
+        isInvalidUseCard = false;
         currCardId = 0;
         cardsInHandCount = 3;
         takeAbilitySuccessRate = 10;
@@ -132,11 +136,16 @@ public class GameManager : MonoBehaviour
 
     public void EnemyMove()
     {
-        Invoke("EnemyAction", 4.7f);
-        Invoke("TurnProcess", 5.7f);
+        Invoke("EnemyAction", enemyActionTime);
+        Invoke("TurnProcess", turnProcessTime);
     }
     private void EnemyAction()
     {
+        if (isInvalidUseCard)
+        {
+            isInvalidUseCard = false;
+            return;
+        }
         Debug.Log("Enemy Move");
         Debug.Log(enemyList.Count);
 
@@ -236,6 +245,11 @@ public class GameManager : MonoBehaviour
         {
             enemy.IsTurnEnd = false;
         }
+    }
+
+    public void UseInvalidCard()
+    {
+        isInvalidUseCard = true;
     }
 
     private void GameOver()

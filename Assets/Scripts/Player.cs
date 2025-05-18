@@ -109,6 +109,10 @@ public class Player : MonoBehaviour
                     AttackEnemy(2000, transform.position + dir);
                 }
             }
+            if (gameManager.additionSuccessRate > 0)
+            {
+                gameManager.additionSuccessRate = 0;
+            }
         }
         else if (IsEnemyInPos(transform.position - dir))
         {
@@ -123,6 +127,13 @@ public class Player : MonoBehaviour
         Debug.Log("Make Enemy Surrender");
         Invoke("TurnEnd", 1f);
     }
+
+    public void GoblinTogetherStrong()
+    {
+        Debug.Log("GoblinTogetherStrong");
+        gameManager.additionSuccessRate += 50;
+    }
+
     public void GetNewPower()
     {
         Debug.Log("Player Get New Power");

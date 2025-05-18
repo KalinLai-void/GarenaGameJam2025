@@ -6,6 +6,7 @@ public class Card : MonoBehaviour
 {
     public int cardId;
     public CardTypeData cardTypeData;
+    private float playerMoveTime = 1f;
     private Player player;
     private GameManager gameManager;
 
@@ -32,19 +33,21 @@ public class Card : MonoBehaviour
         {
             gameManager.CostMP(cardTypeData.cost);
         }
-        Invoke("PlayerMove", 1f);
-        //EnemyMove();
         gameManager.PlayerTurn();
+        Invoke("PlayerMove", playerMoveTime);
+        //EnemyMove();
     }
 
     private void PlayerMove()
     {
+        bool addToDiscard = true;
         Debug.Log("player move");
         if (cardTypeData.cardType == CardType.Move)
         {
             if (!player.Move(cardTypeData.moveBlock))
             {
-                return;
+                gameManager.UseInvalidCard();
+                addToDiscard = false;
             }
         }
         if (cardTypeData.cardType == CardType.Attack)
@@ -60,11 +63,18 @@ public class Card : MonoBehaviour
             player.TakeAbility();
         }
 
-        gameManager.AddToDiscardCards(cardTypeData);
+        if (addToDiscard)
+        {
+            gameManager.AddToDiscardCards(cardTypeData);
+        }
 
         for (int i = 0; i < gameManager.allCards.Count; i++)
         {
-            if (gameManager.allCards[i].cardId != cardId)
+            if (!addToDiscard)
+            {
+                gameManager.hands.Add(gameManager.allCards[i].cardTypeData);
+            }
+            else if (gameManager.allCards[i].cardId != cardId)
             {
                 gameManager.hands.Add(gameManager.allCards[i].cardTypeData);
             }
@@ -73,14 +83,13 @@ public class Card : MonoBehaviour
         {
             gameManager.allCards.RemoveAt(0);
         }
-        
     }
 
-    /*private void EnemyMove()
+    private void EnemyMove()
     {
         Debug.Log("enemy move");
         gameManager.EnemyMove();
-    }*/
+    }
 
 /*
         private Color GetColorByType()

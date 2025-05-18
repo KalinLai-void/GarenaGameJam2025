@@ -4,8 +4,8 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     private int posionCount;
-    private int maxHealthPoint;
-    [SerializeField] private int enemyHealthPoint;
+    private float maxHealthPoint;
+    [SerializeField] private float enemyHealthPoint;
     [SerializeField] private int startPosition = 5;
     private int enemyBaseAttackPower;
     private bool facing; //方向 left: false right: true
@@ -28,7 +28,7 @@ public class Enemy : MonoBehaviour
     private void Initialize()
     {
         posionCount = 0;
-        //enemyHealthPoint = 5;
+        enemyHealthPoint = 5;
         enemyBaseAttackPower = 1;
         facing = false;
         player = FindObjectOfType<Player>();
@@ -195,9 +195,10 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public int EnemyAdditionRate()
+    public float EnemyAdditionRate()
     {
-        return 100 - 100 * (maxHealthPoint - enemyHealthPoint);
+        //return 100 - 100 * (maxHealthPoint - enemyHealthPoint);
+        return 100 * (1 - (maxHealthPoint - enemyHealthPoint) / maxHealthPoint);
     }
 
     private void ChangeFacingDirection()

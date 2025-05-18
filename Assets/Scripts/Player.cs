@@ -36,7 +36,7 @@ public class Player : MonoBehaviour
         facing = true;
         healthPoint = 5;
         healthBar.value = 5;
-        baseAttackPower = 1;
+        baseAttackPower = 3;
         startPosition = 0;
         //gameManager = FindObjectOfType<GameManager>();
         characterAnimController = GetComponent<CharacterAnimController>();
@@ -66,6 +66,10 @@ public class Player : MonoBehaviour
             startPosition += dist;
             gameManager.allPositions[startPosition] = gameObject;
             return true;
+        }
+        else
+        {
+            Invoke("TurnEnd", 1f);
         }
         return false;
     }
@@ -196,13 +200,10 @@ public class Player : MonoBehaviour
         int dir = dist / distAbs;
         for (int i = 1; i <= distAbs; i++)
         {
-            int target = dir + startPosition;
-            if (gameManager.allPositions.ContainsKey(startPosition))
+            int target = dir * i + startPosition;
+            if (IsEnemyInPos(target))
             {
-                if (gameManager.allPositions[startPosition])
-                {
-                    return false;
-                }
+                return false;
             }
         }
         return true;

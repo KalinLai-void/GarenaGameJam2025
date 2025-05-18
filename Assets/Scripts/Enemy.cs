@@ -28,7 +28,6 @@ public class Enemy : MonoBehaviour
     private void Initialize()
     {
         posionCount = 0;
-        maxHealthPoint = 5;
         enemyHealthPoint = 5;
         enemyBaseAttackPower = 1;
         facing = false;
@@ -100,6 +99,7 @@ public class Enemy : MonoBehaviour
         }
         if (IsFacingPlayer())
         {
+            Invoke("TurnEnd", 1f);
             Attack();
         }
         else
@@ -146,9 +146,11 @@ public class Enemy : MonoBehaviour
     private void Move(int dist)
     {
         gameManager.allPositions[startPosition] = null;
+        gameManager.enemyPositions[startPosition] = null;
         //transform.position += new Vector3(1, 0, 0) * dist;
         StartCoroutine("Moving", dist);
         startPosition += dist;
+        gameManager.enemyPositions[startPosition] = gameObject;
         gameManager.allPositions[startPosition] = gameObject;
     }
     private IEnumerator Moving(int dist)

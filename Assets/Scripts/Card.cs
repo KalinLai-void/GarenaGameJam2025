@@ -78,15 +78,7 @@ public class Card : MonoBehaviour
 
     private void PlayerMove()
     {
-        bool addToDiscard;
-        if (gameManager.IsTriggerCardValid())
-        {
-            addToDiscard = TriggerCardAction();
-        }
-        else
-        {
-            addToDiscard = true;
-        }
+        bool addToDiscard = TriggerCardAction();
         
         if (addToDiscard)
         {

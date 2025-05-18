@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class TitlePage : MonoBehaviour
 {
 
-    private string sceneName = "SampleScene";
+    [SerializeField] private string sceneName = "SampleScene";
     // Start is called before the first frame update
     void Start()
     {

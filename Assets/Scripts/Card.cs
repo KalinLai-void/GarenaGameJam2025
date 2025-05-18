@@ -35,12 +35,10 @@ public class Card : MonoBehaviour
             Invoke("PlayerMove", playerMoveTime);
             EnemyMove();
         }
-<<<<<<< Updated upstream
         gameManager.PlayerTurn();
         Invoke("PlayerMove", playerMoveTime);
         //EnemyMove();
-=======
->>>>>>> Stashed changes
+
     }
 
     private bool TriggerCardAction()
